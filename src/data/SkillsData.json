@@ -1,0 +1,100 @@
+{
+    "languages": {
+        "web": [
+            {
+                "id": 1,
+                "name": "PHP",
+                "rating": "8.5",
+                "description": "The main language I use within my job! I have gone from knowing nothing about PHP, to understanding it more than MATLAB; my strongest programming language for the past few years."
+            },
+            {
+                "id": 2,
+                "name": "React",
+                "rating": "6",
+                "description": "The language the website has been built in! I've taken multiple online courses in React and am learning more all of the time!"
+            },
+            {
+                "id": 3,
+                "name": "SQL",
+                "rating": "7.5",
+                "description": "Another language used often within my job. Although I usually see SQL wrapped in CodeIgniter syntax, I have become proficient in using standard SQL when querying databases."
+            },
+            {
+                "id": 4,
+                "name": "JavaScript",
+                "rating": "7.5",
+                "description": "A language that I both love and hate compared to PHP! I often use jQuery instead of pure Javascript (or a combination of the two)."
+            }
+        ],
+        "other": [
+            {
+                "id": 1,
+                "name": "MATLAB",
+                "rating": "8.5",
+                "description": "The language used for my Dissertation! MATLAB was my go-to programming language of choice during my years studying Mathematics at university, so is one of my strongest programming languages."
+            },
+            {
+                "id": 2,
+                "name": "C++",
+                "rating": "5.5",
+                "description": "A language I studied during university, C++ introduced me to object based programming."
+            },
+            {
+                "id": 3,
+                "name": "C#",
+                "rating": "3.5",
+                "description": "I self-taught C# by redoing university assignments in this language, but have not looked at it very much recently!"
+            },
+            {
+                "id": 4,
+                "name": "Python",
+                "rating": "4.5",
+                "description": "A language I've never formally 'learnt'. Whenever I have come across Python, I more-or-less follow along, and it is a programming language that I have in my sights on!"
+            }
+        ]
+    },
+    "additional": [
+        {
+            "id": 1,
+            "name": "GitHub",
+            "rating": "8.5",
+            "description": "Used briefly during my dissertation, I now use GitHub on a daily basis during my role as a Software Developer."
+        },
+        {
+            "id": 2,
+            "name": "jQuery",
+            "rating": "7.5",
+            "description": "Arguable the syntax I had the most trouble understanding initially, I now am confident in using jQuery and prefer it to regular JavaScript."
+        },
+        {
+            "id": 3,
+            "name": "CodeIgniter",
+            "rating": "8",
+            "description": "The main Framework I work on in my job, I have developed an understanding of the framework and will continue to learn it in more detail I work closely with it."
+        },
+        {
+            "id": 4,
+            "name": "Laravel",
+            "rating": "5",
+            "description": "A Framework I'm very interested in learning, I have completed a course in the latest version, and have recently been able to use it for some projects at work."
+        },
+        {
+            "id": 5,
+            "name": "React Native",
+            "rating": "4.5",
+            "description": "Building on my React knowledge whilst developing apps is an exciting concept, so I have undertaken two courses to learn React Native in more detail!"
+        },
+        {
+            "id": 6,
+            "name": "LaTeX",
+            "rating": "9",
+            "description": "Used to write both my project and final-year dissertation at university, I became very fluent in using LaTeX. My preferred way to access it was the online editor Overleaf."
+        },
+        {
+            "id": 7,
+            "name": "Hardware",
+            "rating": "7",
+            "description": "Having built my first computer over 6 years ago, I have always had an interest in computer hardware. I've now built over 10 computers and regularly update their components to keep them up to date!"
+        }
+    ]
+}

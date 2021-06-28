@@ -1,0 +1,368 @@
+.App {
+  text-align: center;
+}
+
+::selection {
+  background-color: #7b26ad;
+  color: #fff;
+}
+
+::-moz-selection {
+  background-color: #7b26ad;
+  color: #fff;
+}
+
+body {
+  background-color: #282c34;
+  min-height: 50vh;
+  color: #f9f9f9;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #7b26ad;
+  border: 1px solid #7b26ad;
+}
+
+.modal-content {
+  color: #3d4148;
+}
+
+#home {
+  background-color: #282c34;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #f9f9f9;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.main-body-sections {
+  background-color: #3d4148;
+  min-height: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #f9f9f9;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+#skills,
+#music {
+  background-color: #282c34;
+}
+
+#music {
+  min-height: 50vh;
+}
+
+#footer {
+  background-color: #3d4148;
+  min-height: 20vh;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  color: #f9f9f9;
+}
+
+.intro-section img {
+  padding-top: 30px;
+  border-radius: 100%;
+  width: 75%;
+  max-width: 300px;
+  padding-bottom: 30px;
+}
+
+.spinner {
+  animation: spin infinite 5s linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+#header {
+  position: fixed;
+  bottom: 0;
+  z-index: 9997;
+  transition: all 0.5s;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+@media (min-width: 768px) {
+  #header {
+    justify-content: center;
+    flex-direction: column;
+    top: 0;
+    left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  #header {
+    justify-content: space-evenly;
+    flex-direction: row;
+    right: 0;
+  }
+}
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+
+.footerLogos {
+  color: #f2f3f5 !important;
+  background: #282c34;
+  padding: 6px 8px;
+  margin-right: 8px;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+.footerList li {
+  margin-bottom: 5px;
+}
+
+/*--------------------------------------------------------------
+# Navigation Menu
+--------------------------------------------------------------*/
+.navBar * {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navBar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.navBar > ul > li {
+  position: relative;
+  white-space: nowrap;
+  border-color: #282c34;
+  display: inline;
+}
+
+.navBar a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navBar a:hover span,
+.navBar li:hover > a span {
+  display: block;
+}
+
+.navBar a i {
+  font-size: 20px;
+}
+
+.navBar a span {
+  padding: 0 5px 0 7px;
+  color: #45505b;
+}
+
+.navBar a:hover,
+.navBar .active > a,
+.navBar li:hover > a {
+  color: #fff;
+  background: #7b26ad;
+}
+
+.navBar a:hover span,
+.navBar .active > a span,
+.navBar li:hover > a span {
+  color: #fff;
+}
+
+.navBar a:hover,
+.navBar li:hover > a {
+  width: 100%;
+  color: #fff;
+}
+
+.button-logos {
+  color: #45505b;
+  padding: 10px 12px;
+  transition: 0.3s;
+  border-radius: 20px;
+  background: #f2f3f5;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.button-shape {
+  color: #45505b;
+  padding: 10px 20px;
+  transition: 0.3s;
+  font-size: 15px;
+  border-radius: 20px;
+  background: #f2f3f5;
+  height: 56px;
+  width: 100%;
+  overflow: hidden;
+  transition: 0.3s;
+  width: 56px;
+}
+
+.btn-clicked {
+  background-color: #7b26ad;
+  color: #fff !important;
+}
+
+.mobile-button {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .navBar a {
+    margin-bottom: 20px;
+  }
+  .navBar a span {
+    display: none;
+    color: #fff;
+  }
+  .navBar a:hover span,
+  .navBar li:hover > a span {
+    display: block;
+  }
+  .mobile-button {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .navBar a {
+    margin-bottom: 5px;
+  }
+  .navBar ul {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+  }
+  .navBar a span {
+    display: none;
+    color: #fff;
+  }
+  .hide-nav {
+    display: none !important;
+  }
+}
+
+/*--------------------------------------------------------------
+# Login
+--------------------------------------------------------------*/
+
+#login .card-body {
+  color: #282c34;
+}
+
+/*--------------------------------------------------------------
+# Skills
+--------------------------------------------------------------*/
+
+.progress {
+  height: 0.25rem;
+}
+.progress-bar {
+  background-color: #7b26ad;
+}
+
+.rating-card {
+  padding: 20px;
+  margin: 10px;
+  background-color: #3d4148;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+/*--------------------------------------------------------------
+# Education
+--------------------------------------------------------------*/
+.education-card {
+  padding: 20px;
+  margin-top: 2rem;
+  background-color: #282c34;
+  border-radius: 15px;
+  text-align: left;
+  width: 100%;
+}
+
+.university-sub-header {
+  margin-bottom: 1rem;
+}
+
+.edu-accord-header {
+  background-color: #3d4148;
+  margin-top: 1rem;
+  border-radius: 10px 10px 0 0;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+
+#education .card-body {
+  background-color: #3d4148;
+  border-radius: 0 0 10px 10px;
+}
+
+/*--------------------------------------------------------------
+# Movies
+--------------------------------------------------------------*/
+
+#movies {
+  padding-bottom: 20vh;
+  min-height: 80vh;
+}
+
+#movies .card-body {
+  background-color: #3d4148;
+  border-radius: 10px;
+}
+
+#movies .btn-primary {
+  background-color: #282c34;
+  border: 1px solid #3d4148;
+}
+
+.random-movie-card {
+  padding: 25px;
+}
+
+.nav-tabs {
+  margin-bottom: 20px;
+}
+
+#moviesAboutDiv {
+  max-width: 90%;
+}
+
+#randomMovieDiv {
+  max-width: 80%;
+  width: 500px;
+}
+
+.topBtn {
+  color: #45505b;
+  padding: 5px 10px;
+  transition: 0.3s;
+  font-size: 15px;
+  border-radius: 20px;
+  background: #f2f3f5;
+}
