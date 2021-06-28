@@ -60,8 +60,11 @@ export default function Login() {
         <div className="w-100 text-center mt-2">
           <p>To access the Movies section, you must be signed in.</p>
           <p>
-            Don't have an account? <Link to="/movies/demo">Click here</Link> to
-            demo the Movies section.
+            Don't have an account? <Link to="/demo">Click here</Link> to demo
+            the Movies section.
+          </p>
+          <p>
+            <a href="https://nathanjms.co.uk">Go to main site.</a>
           </p>
         </div>
       </div>
