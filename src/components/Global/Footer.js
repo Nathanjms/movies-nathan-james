@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { FaGithub, FaYoutube } from "react-icons/fa";
 
 function Footer() {
