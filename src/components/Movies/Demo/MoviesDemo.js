@@ -3,7 +3,6 @@ import MyWatchList from "../MyWatchList";
 import RandomMoviePicker from "../RandomMoviePicker";
 import AboutMovies from "../AboutMovies";
 import { Link } from "react-router-dom";
-import { FaHome } from "react-icons/fa";
 import { Alert, Tabs, Tab, Button } from "react-bootstrap";
 import MovieFormModal from "./MovieFormModal";
 import Footer from "../../Global/Footer";
