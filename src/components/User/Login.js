@@ -18,7 +18,7 @@ export default function Login() {
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
-      history.push("/movies");
+      history.push("/");
     } catch (err) {
       // Handle Errors here.
       var errorCode = err.code;
@@ -58,12 +58,11 @@ export default function Login() {
           </Card.Body>
         </Card>
         <div className="w-100 text-center mt-2">
-          Don't have an account? <Link to="/">Click here</Link> to go back to
-          the main site.
-        </div>
-        <div className="w-100 text-center mt-2">
-          Alternatively, <Link to="/movies/demo">click here</Link> to see a demo of the Movies
-          Section.
+          <p>To access the Movies section, you must be signed in.</p>
+          <p>
+            Don't have an account? <Link to="/movies/demo">Click here</Link> to
+            demo the Movies section.
+          </p>
         </div>
       </div>
     </Container>

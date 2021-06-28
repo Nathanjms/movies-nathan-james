@@ -109,12 +109,9 @@ export default function Movies() {
       <div className="container" id="movies">
         <div className="row">
           <div className="col-lg-12 mt-4">
-            <Link to="/" className="homeBtn" style={{ float: "left" }}>
-              <FaHome />
-            </Link>
             <Button
               variant="link"
-              className="homeBtn"
+              className="topBtn"
               style={{ float: "right" }}
               onClick={handleLogout}
             >

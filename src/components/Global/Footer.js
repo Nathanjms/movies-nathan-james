@@ -30,13 +30,9 @@ function Footer() {
           <h4 style={{ paddingBottom: "20px" }}>Extras</h4>
           <div className="contact">
             <ul className="footerList list-unstyled">
-              <li>
-                <Link to="/notes">Notes</Link>
-              </li>
-              <li>
-                <Link to="/movies">Movies</Link>
-              </li>
-              <li>Last updated: 6th June 2021</li>
+              <li><a href="https://www.nathanjms.co.uk">Main Site</a></li>
+              <li><a href="https://www.movies.nathanjms.co.uk">Movies</a></li>
+              <li>Last updated: 28th June 2021</li>
             </ul>
           </div>
         </div>

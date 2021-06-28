@@ -2,6 +2,16 @@
   text-align: center;
 }
 
+::selection {
+  background-color: #7b26ad;
+  color: #fff;
+}
+
+::-moz-selection {
+  background-color: #7b26ad;
+  color: #fff;
+}
+
 body {
   background-color: #282c34;
   min-height: 50vh;
@@ -346,4 +356,13 @@ body {
 #randomMovieDiv {
   max-width: 80%;
   width: 500px;
+}
+
+.topBtn {
+  color: #45505b;
+  padding: 5px 10px;
+  transition: 0.3s;
+  font-size: 15px;
+  border-radius: 20px;
+  background: #f2f3f5;
 }
