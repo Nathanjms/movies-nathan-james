@@ -30,7 +30,6 @@ function Footer() {
           <div className="contact">
             <ul className="footerList list-unstyled">
               <li><a href="https://www.nathanjms.co.uk">Main Site</a></li>
-              <li><a href="https://www.movies.nathanjms.co.uk">Movies</a></li>
               <li>Last updated: 28th June 2021</li>
             </ul>
           </div>
