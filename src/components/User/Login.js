@@ -14,20 +14,21 @@ export default function Login() {
     setLoading(true);
     axios
       .post("http://nathan-laravel-api.test/api/login", {
+        //TODO: URL of live one vs dev from .env file
         email: email,
         password: password,
       })
       .then((response) => {
         setError("");
-        if (response.success) {
-          localStorage.setItem("token", JSON.stringify(response.token.value));
+        if (response.data.success) {
+          localStorage.setItem("token", response.data.token.value);
           localStorage.setItem(
             "expiry",
-            JSON.stringify(response.token.expiration)
+            JSON.stringify(response.data.token.expiration)
           );
           return history.push("/");
         } else {
-          setError("Invalid Response");
+          setError("Oops! Invalid Response from API");
         }
       })
       .catch((err) => {
