@@ -50,7 +50,7 @@ export default function MoviesDemo() {
           </div>
           <div className="col-lg-12">
             <h5 className="text-center">
-              <Link to="/">www.nathanjms.co.uk</Link>
+              <Link to="https://nathanjms.co.uk">www.nathanjms.co.uk</Link>
             </h5>
             <h1 className="text-center">Movies</h1>
             <h4 className="text-center">
