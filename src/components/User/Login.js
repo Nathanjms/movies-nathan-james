@@ -1,35 +1,51 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Container, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
 
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
+  async function login(email, password) {
+    setLoading(true);
+    axios
+      .post("http://nathan-laravel-api.test/api/login", {
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        setError("");
+        if (response.success) {
+          localStorage.setItem("token", JSON.stringify(response.token.value));
+          localStorage.setItem(
+            "expiry",
+            JSON.stringify(response.token.expiration)
+          );
+          return history.push("/");
+        } else {
+          setError("Invalid Response");
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+        console.log(err.response.data.message);
+        var errMessage = err.response.data.message;
+        if (typeof errMessage !== "undefined") {
+          setError(errMessage);
+        } else {
+          setError("An error occurred, please try again.");
+        }
+        setLoading(false);
+      });
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-
-    try {
-      setError("");
-      setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value);
-      history.push("/");
-    } catch (err) {
-      // Handle Errors here.
-      var errorCode = err.code;
-      var errorMessage = err.message;
-      if (errorCode === "auth/wrong-password") {
-        setError("Wrong Password");
-      } else {
-        setError(errorMessage);
-      }
-      setLoading(false);
-    }
+    await login(emailRef.current.value, passwordRef.current.value);
   }
   return (
     <Container

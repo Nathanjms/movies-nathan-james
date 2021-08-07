@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MyWatchList from "./MyWatchList";
 import RandomMoviePicker from "./RandomMoviePicker";
-import { useAuth } from "../../contexts/AuthContext";
+// import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 import { Alert, Tabs, Tab, Button } from "react-bootstrap";
 import { findIndex } from "lodash";
@@ -18,7 +18,7 @@ export default function Movies() {
   const [show, setShow] = useState(false);
   const [userInfo, setUserInfo] = useState(false);
 
-  const { currentUser, logout } = useAuth();
+  // const { currentUser, logout } = useAuth();
   const history = useHistory();
 
   const baseURL =
@@ -45,7 +45,7 @@ export default function Movies() {
   };
 
   useEffect(() => {
-    getUserInfo(currentUser.uid);
+    // getUserInfo(currentUser.uid);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -80,7 +80,7 @@ export default function Movies() {
     try {
       await axios.post(baseURL + "/api/movies/seen", {
         movieId: movieId,
-        userId: currentUser.uid,
+        // userId: currentUser.uid,
       });
       let movieIndex = findIndex(moviesList, {
         id: movieId,
@@ -96,7 +96,7 @@ export default function Movies() {
     setError("");
 
     try {
-      await logout();
+      // await logout();
       history.push("/");
     } catch {
       setError("Failed to log out.");
@@ -180,7 +180,7 @@ export default function Movies() {
           handleClose={() => setShow(false)}
           show={show}
           baseURL={baseURL}
-          userId={currentUser.uid}
+          // userId={currentUser.uid}
           setError={setError}
           setSuccess={setSuccess}
         />
