@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import MyWatchList from "../MyWatchList";
 import RandomMoviePicker from "../RandomMoviePicker";
 import AboutMovies from "../AboutMovies";
-import { Link } from "react-router-dom";
 import { Alert, Tabs, Tab, Button } from "react-bootstrap";
 import MovieFormModal from "./MovieFormModal";
 import Footer from "../../Global/Footer";
@@ -50,7 +49,7 @@ export default function MoviesDemo() {
           </div>
           <div className="col-lg-12">
             <h5 className="text-center">
-              <Link to="https://nathanjms.co.uk">www.nathanjms.co.uk</Link>
+              <a href="https://nathanjms.co.uk">www.nathanjms.co.uk</a>
             </h5>
             <h1 className="text-center">Movies</h1>
             <h4 className="text-center">
