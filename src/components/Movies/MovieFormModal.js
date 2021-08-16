@@ -41,7 +41,7 @@ export default function MovieFormModal({
       setSuccess("");
       setSuccess(`Movie "${titleRef.current.value.trim()}" Added Successfully`);
     } catch (err) {
-      var errorMessage = err.message;
+      var errorMessage = err.response.data.message;
       handleClose();
       setLoading(false);
       setError(errorMessage);
