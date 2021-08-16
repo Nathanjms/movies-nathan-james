@@ -1,7 +1,6 @@
 import React from "react";
 import "../css/App.css";
 import Login from "./User/Login";
-// import Signup from "./Signup";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from "./Global/PrivateRoute";
 import Movies from "./Movies/Movies";

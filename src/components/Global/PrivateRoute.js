@@ -1,16 +1,21 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
-// import { useAuth } from "../../contexts/AuthContext";
 
 export default function PrivateRoute({ component: Component, ...rest }) {
-  const currentUser = null;
+  var currentUser = null;
+  if (
+    localStorage.getItem("token") !== undefined &&
+    localStorage.getItem("expiry") > Math.floor(Date.now() / 1000)
+  ) {
+    currentUser = localStorage.getItem("token");
+  }
 
   return (
     <Route
       {...rest}
       render={(props) => {
         return currentUser ? (
-          <Component {...props} />
+          <Component currentUser={currentUser} {...props} />
         ) : (
           <Redirect to="/login" />
         );
