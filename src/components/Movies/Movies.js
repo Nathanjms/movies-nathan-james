@@ -71,7 +71,7 @@ export default function Movies({ currentUser }) {
       const result = await request.get(`/api/movies/${userGroupId}/group`);
       setMyMovies(result.data);
     } catch (err) {
-      setError(err.message);
+      setError(err.message); //TODO: handle this correctly
     }
     setLoading(false);
   };
@@ -91,7 +91,7 @@ export default function Movies({ currentUser }) {
       setSuccess(`Movie "${moviesList[movieIndex]["title"]}" marked as seen!`);
       setMyMovies(tempMovieList);
     } catch (err) {
-      setError(err.message);
+      setError(err.message); //TODO: handle this correctly
     }
   };
 
