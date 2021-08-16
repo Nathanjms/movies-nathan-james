@@ -97,14 +97,12 @@ export default function Movies({ currentUser }) {
 
   async function handleLogout() {
     setError("");
-    setLoading(true);
     localStorage.clear();
     try {
       await request.post("/api/logout");
     } catch (err) {
     } finally {
       history.push("/login");
-      setLoading(false);
     }
   }
 

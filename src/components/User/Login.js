@@ -32,8 +32,6 @@ export default function Login() {
         }
       })
       .catch((err) => {
-        console.log(err.message);
-        console.log(err.response.data.message);
         var errMessage = err.response.data.message;
         if (typeof errMessage !== "undefined") {
           setError(errMessage);
