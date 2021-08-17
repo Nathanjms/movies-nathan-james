@@ -4,8 +4,6 @@ import { Button, Modal, Form } from "react-bootstrap";
 export default function MovieFormModal({
   handleClose,
   show,
-  baseURL,
-  userId,
   setError,
   setSuccess,
   request,

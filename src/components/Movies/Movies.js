@@ -1,5 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import MyWatchList from "./MyWatchList";
 import RandomMoviePicker from "./RandomMoviePicker";
 import { useHistory } from "react-router-dom";
@@ -8,6 +8,7 @@ import { findIndex } from "lodash";
 import MovieFormModal from "./MovieFormModal";
 import AboutMovies from "./AboutMovies";
 import Footer from "../Global/Footer";
+import { AuthenticatedRequest, FormatResponseError } from "../Global/apiCommunication";
 
 export default function Movies({ currentUser }) {
   const [error, setError] = useState("");
@@ -16,69 +17,45 @@ export default function Movies({ currentUser }) {
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [userInfo, setUserInfo] = useState(false);
-
-  const baseURL =
-    process.env.NODE_ENV === "development"
-      ? `http://nathan-laravel-api.test`
-      : `https://nathanjms-api.herokuapp.com`; //TODO: update
-
-  const request = axios.create({
-    baseURL: baseURL,
-    headers: {
-      Authorization: `Bearer ${currentUser}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  });
-
   const history = useHistory();
 
   const getUserInfo = async () => {
     setLoading(true);
     try {
-      const result = await request.post("/api/movies/user-info");
+      const result = await AuthenticatedRequest(currentUser).post(
+        "/api/movies/user-info"
+      );
       setUserInfo(result.data);
     } catch (err) {
-      setUserInfo({ group_id: 0, group_name: "Unknown", user_name: "Unknown" });
-      if (err.response.status === 401) {
-        setError(
-          "Error: Authentication Failed. Please try logging out/in to refresh your session."
-        );
-      } else if (typeof err.response !== "undefined") {
-        setError(err.response.data.message);
-      } else {
-        setError("Error: The API could not be reached.");
-      }
+      setError(FormatResponseError(err));
     }
     setLoading(false);
   };
 
   useEffect(() => {
     getUserInfo();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (userInfo && userInfo.group_id > 0) {
       getMovies(userInfo.group_id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
 
   const getMovies = async (userGroupId) => {
     setLoading(true);
     try {
-      const result = await request.get(`/api/movies/${userGroupId}/group`);
+      const result = await AuthenticatedRequest(currentUser).get(`/api/movies/${userGroupId}/group`);
       setMyMovies(result.data);
     } catch (err) {
-      setError(err.message); //TODO: handle this correctly
+      setError(FormatResponseError(err));
     }
     setLoading(false);
   };
 
   const markAsSeen = async (movieId) => {
     try {
-      await request.put("/api/movies/mark-as-seen", {
+      await AuthenticatedRequest(currentUser).put("/api/movies/mark-as-seen", {
         movieId: movieId,
       });
       let tempMovieList = moviesList.slice(0);
@@ -91,7 +68,7 @@ export default function Movies({ currentUser }) {
       setSuccess(`Movie "${moviesList[movieIndex]["title"]}" marked as seen!`);
       setMyMovies(tempMovieList);
     } catch (err) {
-      setError(err.message); //TODO: handle this correctly
+      setError(FormatResponseError(err));
     }
   };
 
@@ -99,7 +76,7 @@ export default function Movies({ currentUser }) {
     setError("");
     localStorage.clear();
     try {
-      await request.post("/api/logout");
+      await AuthenticatedRequest(currentUser).post("/api/logout");
     } catch (err) {
     } finally {
       history.push("/login");
@@ -182,10 +159,9 @@ export default function Movies({ currentUser }) {
         <MovieFormModal
           handleClose={() => setShow(false)}
           show={show}
-          baseURL={baseURL}
           setError={setError}
           setSuccess={setSuccess}
-          request={request}
+          request={AuthenticatedRequest(currentUser)}
           moviesList={moviesList}
           groupId={userInfo.group_id}
         />
