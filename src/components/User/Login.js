@@ -10,11 +10,15 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
+  const baseURL =
+    process.env.NODE_ENV === "development"
+      ? `http://nathan-laravel-api.test`
+      : `http://api.nathanjms.co.uk`;
+
   async function login(email, password) {
     setLoading(true);
     axios
-      .post("http://nathan-laravel-api.test/api/login", {
-        //TODO: URL of live one vs dev from .env file
+      .post(`${baseURL}/api/login`, {
         email: email,
         password: password,
       })
