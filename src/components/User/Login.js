@@ -24,7 +24,7 @@ export default function Login() {
       })
       .then((response) => {
         setError("");
-        if (response.data.success) {
+        if (response?.data?.success) {
           localStorage.setItem("token", response.data.token.value);
           localStorage.setItem(
             "expiry",
@@ -36,9 +36,8 @@ export default function Login() {
         }
       })
       .catch((err) => {
-        var errMessage = err.response.data.message;
-        if (typeof errMessage !== "undefined") {
-          setError(errMessage);
+        if (err?.response?.data?.message) {
+          setError(err.response.data.message);
         } else {
           setError("An error occurred, please try again.");
         }

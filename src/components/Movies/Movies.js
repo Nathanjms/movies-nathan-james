@@ -37,7 +37,7 @@ export default function Movies({ currentUser }) {
   }, []);
 
   useEffect(() => {
-    if (userInfo && userInfo.group_id > 0) {
+    if (userInfo?.group_id > 0) {
       getMovies(userInfo.group_id);
     }
   }, [userInfo]);
