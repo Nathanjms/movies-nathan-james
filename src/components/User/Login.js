@@ -1,35 +1,53 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Container, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
 
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
+  const baseURL =
+    process.env.NODE_ENV === "development"
+      ? `http://nathan-laravel-api.test`
+      : `https://nathanjms-laravel-api.herokuapp.com`;
+
+  async function login(email, password) {
+    setLoading(true);
+    axios
+      .post(`${baseURL}/api/login`, {
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        setError("");
+        if (response?.data?.success) {
+          localStorage.setItem("token", response.data.token.value);
+          localStorage.setItem(
+            "expiry",
+            JSON.stringify(response.data.token.expiration)
+          );
+          return history.push("/");
+        } else {
+          setError("Oops! Invalid Response from API");
+        }
+      })
+      .catch((err) => {
+        if (err?.response?.data?.message) {
+          setError(err.response.data.message);
+        } else {
+          setError("An error occurred, please try again.");
+        }
+        setLoading(false);
+      });
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-
-    try {
-      setError("");
-      setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value);
-      history.push("/");
-    } catch (err) {
-      // Handle Errors here.
-      var errorCode = err.code;
-      var errorMessage = err.message;
-      if (errorCode === "auth/wrong-password") {
-        setError("Wrong Password");
-      } else {
-        setError(errorMessage);
-      }
-      setLoading(false);
-    }
+    await login(emailRef.current.value, passwordRef.current.value);
   }
   return (
     <Container

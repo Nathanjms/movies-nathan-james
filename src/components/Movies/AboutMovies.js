@@ -65,7 +65,7 @@ export default function AboutMovies() {
                 Make demo and regular movie section's JavaScript files match
                 closer to make code more dry.
               </li>
-              <li>Switch backend to Laravel API</li>
+              <li><strike>Switch backend to Laravel API</strike> - Added 22/08/21</li>
               <ul>
                 <li>
                   Including the user's system from Firebase, so the users and

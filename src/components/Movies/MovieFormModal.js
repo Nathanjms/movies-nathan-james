@@ -1,14 +1,14 @@
 import React, { useRef, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import axios from "axios";
 
 export default function MovieFormModal({
   handleClose,
   show,
-  baseURL,
-  userId,
   setError,
   setSuccess,
+  request,
+  moviesList,
+  groupId
 }) {
   const titleRef = useRef();
   const [loading, setLoading] = useState(false);
@@ -24,16 +24,22 @@ export default function MovieFormModal({
     try {
       setError("");
       setLoading(true);
-      await axios.post(baseURL + "/api/movies/add", {
+      await request.post(`/api/movies/${groupId}/add`, {
         title: titleRef.current.value,
-        firebaseId: userId,
+      });
+      const lastIndex = moviesList.length - 1;
+      moviesList.push({
+        id: moviesList[lastIndex]["id"] + 1,
+        title: titleRef.current.value.trim(),
+        seen: false,
+        rating: null,
       });
       handleClose();
       setLoading(false);
       setSuccess("");
       setSuccess(`Movie "${titleRef.current.value.trim()}" Added Successfully`);
     } catch (err) {
-      var errorMessage = err.message;
+      var errorMessage = err.response.data.message;
       handleClose();
       setLoading(false);
       setError(errorMessage);

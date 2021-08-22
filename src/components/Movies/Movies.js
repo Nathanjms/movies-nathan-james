@@ -1,105 +1,85 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import MyWatchList from "./MyWatchList";
 import RandomMoviePicker from "./RandomMoviePicker";
-import { useAuth } from "../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 import { Alert, Tabs, Tab, Button } from "react-bootstrap";
 import { findIndex } from "lodash";
 import MovieFormModal from "./MovieFormModal";
-import AboutMovies from "./AboutMovies"
+import AboutMovies from "./AboutMovies";
 import Footer from "../Global/Footer";
+import { AuthenticatedRequest, FormatResponseError } from "../Global/apiCommunication";
 
-export default function Movies() {
+export default function Movies({ currentUser }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [moviesList, setMyMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [userInfo, setUserInfo] = useState(false);
-
-  const { currentUser, logout } = useAuth();
   const history = useHistory();
 
-  const baseURL =
-    process.env.NODE_ENV === "development"
-      ? `http://localhost:3002`
-      : `https://nathanjms-api.herokuapp.com`;
-
-  const getUserInfo = async (uid) => {
+  const getUserInfo = async () => {
     setLoading(true);
     try {
-      const result = await axios.post(baseURL + "/api/user-info", {
-        firebaseId: uid,
-      });
+      const result = await AuthenticatedRequest(currentUser).post(
+        "/api/movies/user-info"
+      );
       setUserInfo(result.data);
     } catch (err) {
-      setUserInfo({group_id: 0, group_name: "Unknown", user_name: "Unknown"});
-      if (typeof err.response !== 'undefined') {
-        setError(err.response.data);
-      } else {
-        setError('Error: The API could not be reached.');
-      }
+      setError(FormatResponseError(err));
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    getUserInfo(currentUser.uid);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getUserInfo();
   }, []);
 
   useEffect(() => {
-    if (userInfo && userInfo.group_id > 0) {
+    if (userInfo?.group_id > 0) {
       getMovies(userInfo.group_id);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo]);
-
-  useEffect(() => {
-    if (userInfo && success.length > 0) {
-      getMovies(userInfo.group_id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [success]);
 
   const getMovies = async (userGroupId) => {
     setLoading(true);
     try {
-      const result = await axios.get(
-        baseURL + "/api/" + userGroupId + "/movies"
-      );
+      const result = await AuthenticatedRequest(currentUser).get(`/api/movies/${userGroupId}/group`);
       setMyMovies(result.data);
     } catch (err) {
-      setError(err.message);
+      setError(FormatResponseError(err));
     }
     setLoading(false);
   };
 
   const markAsSeen = async (movieId) => {
     try {
-      await axios.post(baseURL + "/api/movies/seen", {
+      await AuthenticatedRequest(currentUser).put("/api/movies/mark-as-seen", {
         movieId: movieId,
-        userId: currentUser.uid,
       });
+      let tempMovieList = moviesList.slice(0);
       let movieIndex = findIndex(moviesList, {
         id: movieId,
       });
+      tempMovieList[movieIndex]["seen"] = true;
+
       setSuccess("");
       setSuccess(`Movie "${moviesList[movieIndex]["title"]}" marked as seen!`);
+      setMyMovies(tempMovieList);
     } catch (err) {
-      setError(err.message);
+      setError(FormatResponseError(err));
     }
   };
 
   async function handleLogout() {
     setError("");
-
+    localStorage.clear();
     try {
-      await logout();
-      history.push("/");
-    } catch {
-      setError("Failed to log out.");
+      await AuthenticatedRequest(currentUser).post("/api/logout");
+    } catch (err) {
+    } finally {
+      history.push("/login");
     }
   }
 
@@ -118,7 +98,7 @@ export default function Movies() {
             </Button>
           </div>
           <div className="col-lg-12">
-          <h5 className="text-center">
+            <h5 className="text-center">
               <a href="https://www.nathanjms.co.uk">www.nathanjms.co.uk</a>
             </h5>
             <h1 className="text-center">Movies</h1>
@@ -179,10 +159,11 @@ export default function Movies() {
         <MovieFormModal
           handleClose={() => setShow(false)}
           show={show}
-          baseURL={baseURL}
-          userId={currentUser.uid}
           setError={setError}
           setSuccess={setSuccess}
+          request={AuthenticatedRequest(currentUser)}
+          moviesList={moviesList}
+          groupId={userInfo.group_id}
         />
       </div>
       <footer id="footer">
