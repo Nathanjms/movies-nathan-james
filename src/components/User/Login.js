@@ -13,7 +13,7 @@ export default function Login() {
   const baseURL =
     process.env.NODE_ENV === "development"
       ? `http://nathan-laravel-api.test`
-      : `http://api.nathanjms.co.uk`;
+      : `https://nathanjms-laravel-api.herokuapp.com/`;
 
   async function login(email, password) {
     setLoading(true);

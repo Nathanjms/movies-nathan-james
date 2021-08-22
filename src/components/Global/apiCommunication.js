@@ -4,7 +4,7 @@ export function AuthenticatedRequest(currentUser) {
   const baseURL =
     process.env.NODE_ENV === "development"
       ? `http://nathan-laravel-api.test`
-      : `http://api.nathanjms.co.uk`;
+      : `https://nathanjms-laravel-api.herokuapp.com/`;
 
   return axios.create({
     baseURL: baseURL,
