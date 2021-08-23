@@ -66,7 +66,7 @@ export default function Movies({ currentUser }) {
       );
       const resultAllUnseen = await AuthenticatedRequest(currentUser).get(
         `/api/movies/${userGroupId}/group?isSeen=1&perPage=200`
-      );
+      ); //TODO: Get this array when doing the random movie selection.
 
       setMySeenMovies(resultSeen.data);
       setMyUnseenMovies(resultUnseen.data);
