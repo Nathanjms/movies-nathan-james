@@ -46,7 +46,7 @@ export default function Movies({ currentUser }) {
     setLoading(true);
     try {
       const result = await AuthenticatedRequest(currentUser).get(`/api/movies/${userGroupId}/group`);
-      setMyMovies(result.data);
+      setMyMovies(result.data.data);
     } catch (err) {
       setError(FormatResponseError(err));
     }
