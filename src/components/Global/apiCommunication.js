@@ -17,17 +17,12 @@ export function AuthenticatedRequest(currentUser) {
 }
 
 export const FormatResponseError = (err) => {
-  if (
-    typeof err.response.status !== "undefined" &&
-    err.response.status === 401
-  ) {
+  console.log(err);
+  if (err?.response?.status === 401) {
     localStorage.clear();
     return "Authentication Failed. Please login again.";
   }
-  if (
-    typeof err.response.data.message !== "undefined" &&
-    err.response.data.message
-  ) {
+  if (err?.response?.data?.message) {
     return err.response.data.message;
   }
   return "Error: The API could not be reached.";
