@@ -35,9 +35,6 @@ export default function MovieFormModal({
         return setError("Could not obtain new movie ID.");
       }
 
-      console.log(result.data.id);
-      console.log(moviesList);
-      console.log(moviesList.data);
       var tempMovieList = cloneDeep(moviesList);
       tempMovieList.data.push({
         id: result.data.id,
@@ -51,7 +48,6 @@ export default function MovieFormModal({
       setSuccess("");
       setSuccess(`Movie "${titleRef.current.value.trim()}" Added Successfully`);
     } catch (err) {
-      console.log(err);
       handleClose();
       setLoading(false);
       setError(FormatResponseError(err));

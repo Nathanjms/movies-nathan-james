@@ -43,11 +43,11 @@ export default function Movies({ currentUser }) {
 
   useEffect(() => {
     if (userInfo?.group_id > 0) {
-      getMovies(userInfo.group_id);
+      getAllMovies(userInfo.group_id);
     }
   }, [userInfo]);
 
-  const getMovies = async (userGroupId) => {
+  const getAllMovies = async (userGroupId) => {
     setLoading(true);
     try {
       const resultSeen = await AuthenticatedRequest(currentUser).get(
