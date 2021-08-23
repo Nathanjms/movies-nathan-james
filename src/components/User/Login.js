@@ -4,17 +4,16 @@ import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import ReactLoading from "react-loading";
 
+export const baseURL = process.env.NODE_ENV === "development"
+? `http://nathan-laravel-api.test`
+: `https://nathanjms-laravel-api.herokuapp.com`;
+
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-
-  const baseURL =
-    process.env.NODE_ENV === "development"
-      ? `http://nathan-laravel-api.test`
-      : `https://nathanjms-laravel-api.herokuapp.com`;
 
   async function login(email, password) {
     setLoading(true);

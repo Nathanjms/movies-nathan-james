@@ -38,11 +38,11 @@ export default function Movies({ currentUser }) {
   };
 
   const perPage = () => {
-    if(window.screen.availWidth >= 1020) return 8;
-    if(480 < window.screen.availWidth && window.screen.availWidth < 1020) return 6;
+    if (window.screen.availWidth >= 1020) return 8;
+    if (480 < window.screen.availWidth && window.screen.availWidth < 1020)
+      return 6;
     return 4;
-
-  }
+  };
 
   useEffect(async () => {
     await getUserInfo();
@@ -74,6 +74,9 @@ export default function Movies({ currentUser }) {
 
   const getNewMoviePage = async (url, isSeen) => {
     setLoading(true);
+    if (process.env.NODE_ENV === "production") {
+      url = url.replace("http:", "https:");
+    }
     try {
       const newMovies = await AuthenticatedRequest(currentUser).get(url);
       if (isSeen) {
@@ -82,7 +85,7 @@ export default function Movies({ currentUser }) {
       return setMyUnseenMovies(newMovies.data);
     } catch (err) {
       setError(FormatResponseError(err));
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -113,7 +116,7 @@ export default function Movies({ currentUser }) {
     tempMovieList = cloneDeep(seenMoviesList);
     tempMovieList.data.push(moviesArray[movieIndex]);
     setMySeenMovies(tempMovieList);
-  }
+  };
 
   async function handleLogout() {
     setError("");
