@@ -18,6 +18,7 @@ export default function Movies({ currentUser }) {
   const [success, setSuccess] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
+  const [allUnseenMovies, setAllUnseenMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [userInfo, setUserInfo] = useState(false);
@@ -63,9 +64,13 @@ export default function Movies({ currentUser }) {
       const resultUnseen = await AuthenticatedRequest(currentUser).get(
         `/api/movies/${userGroupId}/group?isSeen=0&perPage=${perPage()}`
       );
+      const resultAllUnseen = await AuthenticatedRequest(currentUser).get(
+        `/api/movies/${userGroupId}/group?isSeen=1&perPage=200`
+      );
 
       setMySeenMovies(resultSeen.data);
       setMyUnseenMovies(resultUnseen.data);
+      setAllUnseenMovies(resultAllUnseen.data);
     } catch (err) {
       setError(FormatResponseError(err));
     }
@@ -196,7 +201,7 @@ export default function Movies({ currentUser }) {
             />
           </Tab>
           <Tab eventKey="random-movie-picker" title="Random Movie Picker">
-            <RandomMoviePicker movies={unseenMoviesList} />
+            <RandomMoviePicker movies={allUnseenMovies} />
           </Tab>
           <Tab eventKey="about" title="About">
             <AboutMovies />
