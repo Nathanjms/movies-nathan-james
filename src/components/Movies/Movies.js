@@ -18,7 +18,6 @@ export default function Movies({ currentUser }) {
   const [success, setSuccess] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
-  const [allUnseenMovies, setAllUnseenMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [userInfo, setUserInfo] = useState(false);
@@ -70,7 +69,6 @@ export default function Movies({ currentUser }) {
 
       setMySeenMovies(resultSeen.data);
       setMyUnseenMovies(resultUnseen.data);
-      setAllUnseenMovies(resultAllUnseen.data);
     } catch (err) {
       setError(FormatResponseError(err));
     }
@@ -201,7 +199,7 @@ export default function Movies({ currentUser }) {
             />
           </Tab>
           <Tab eventKey="random-movie-picker" title="Random Movie Picker">
-            <RandomMoviePicker movies={allUnseenMovies} />
+            <RandomMoviePicker currentUser={currentUser} groupId={userInfo.group_id} />
           </Tab>
           <Tab eventKey="about" title="About">
             <AboutMovies />

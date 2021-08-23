@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Button } from "react-bootstrap";
+import {
+  AuthenticatedRequest,
+} from "../Global/apiCommunication";
 
-export default function RandomMoviePicker({ movies }) {
+export default function RandomMoviePicker({ currentUser, groupId }) {
   const [chosen, setChosen] = useState(false);
   const [choosing, setChoosing] = useState(false);
   const [randomMovie, setRandomMovie] = useState("");
+  let movies = [];
+  const getAllMovies = async () => {
+    movies = await AuthenticatedRequest(currentUser).get(
+      `/api/movies/${groupId}/group?isSeen=0&perPage=200`
+    ); //TODO: Get this array when doing the random movie selection.;
+    console.log(movies);
+  }
 
-  movies = movies?.data ? movies.data : [];
+  useEffect(async () => {
+    await getAllMovies();
+  }, []);
 
   function random(array) {
     return array[Math.floor(Math.random() * array.length)];
