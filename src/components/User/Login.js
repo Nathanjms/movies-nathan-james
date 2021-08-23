@@ -2,6 +2,11 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Container, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
+import ReactLoading from "react-loading";
+
+export const baseURL = process.env.NODE_ENV === "development"
+? `http://nathan-laravel-api.test`
+: `https://nathanjms-laravel-api.herokuapp.com`;
 
 export default function Login() {
   const emailRef = useRef();
@@ -9,11 +14,6 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-
-  const baseURL =
-    process.env.NODE_ENV === "development"
-      ? `http://nathan-laravel-api.test`
-      : `https://nathanjms-laravel-api.herokuapp.com`;
 
   async function login(email, password) {
     setLoading(true);
@@ -73,6 +73,18 @@ export default function Login() {
                 Log In
               </Button>
             </Form>
+            {loading && (
+              <div className="col-lg-12 mt-4">
+                <ReactLoading
+                  height={30}
+                  width={30}
+                  type={"spin"}
+                  color="#7b26ad"
+                  className="inline-loading"
+                />
+                <p>Connecting to API...</p>
+              </div>
+            )}
           </Card.Body>
         </Card>
         <div className="w-100 text-center mt-2">

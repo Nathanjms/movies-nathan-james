@@ -14,12 +14,12 @@ export default function MoviesDemo() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    getMovies();
+    getAllMovies();
   }, []);
 
   useEffect(() => {}, [moviesList]);
 
-  const getMovies = () => {
+  const getAllMovies = () => {
     setMyMovies(require("./DemoMovieList.json"));
   };
 
