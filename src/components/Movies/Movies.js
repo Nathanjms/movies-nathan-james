@@ -13,7 +13,9 @@ import { AuthenticatedRequest, FormatResponseError } from "../Global/apiCommunic
 export default function Movies({ currentUser }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [moviesList, setMyMovies] = useState([]);
+  const [seenMoviesList, setMyMovies] = useState([]);
+  const [unseenMoviesList, setMyUnseenMovies] = useState([]);
+  const [nextPageUrl, setNextPageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [userInfo, setUserInfo] = useState(false);
@@ -45,8 +47,18 @@ export default function Movies({ currentUser }) {
   const getMovies = async (userGroupId) => {
     setLoading(true);
     try {
-      const result = await AuthenticatedRequest(currentUser).get(`/api/movies/${userGroupId}/group`);
-      setMyMovies(result.data);
+      const resultSeen = await AuthenticatedRequest(currentUser).get(`/api/movies/${userGroupId}/group?isSeen=1`);
+      const resultUnseen = await AuthenticatedRequest(currentUser).get(`/api/movies/${userGroupId}/group?isSeen=0`);
+
+      const results = [resultSeen, resultUnseen];
+
+      results.forEach((result, index) => {
+        console.log(result, index);
+        setMyMovies(result.data.data);
+        if (result.data?.next_page_url) {
+          setNextPageUrl(result.data.next_page_url);
+        }
+      });
     } catch (err) {
       setError(FormatResponseError(err));
     }
@@ -136,6 +148,7 @@ export default function Movies({ currentUser }) {
               loading={loading}
               markAsSeen={markAsSeen}
               movies={moviesList}
+              nextPageUrl={nextPageUrl}
               seen={false}
             />
           </Tab>
@@ -144,6 +157,7 @@ export default function Movies({ currentUser }) {
               loading={loading}
               markAsSeen={markAsSeen}
               movies={moviesList}
+              nextPageUrl={nextPageUrl}
               seen={true}
             />
           </Tab>

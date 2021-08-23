@@ -2,7 +2,13 @@ import React from "react";
 import { Card, Button } from "react-bootstrap";
 import ReactLoading from "react-loading";
 
-export default function MyWatchList({ loading, movies, markAsSeen, seen }) {
+export default function MyWatchList({
+  loading,
+  movies,
+  markAsSeen,
+  seen,
+  nextPageUrl,
+}) {
   var watched = [];
   var unwatched = [];
 
