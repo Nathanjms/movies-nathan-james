@@ -37,6 +37,13 @@ export default function Movies({ currentUser }) {
     }
   };
 
+  const perPage = () => {
+    if(window.screen.availWidth >= 1020) return 8;
+    if(480 < window.screen.availWidth && window.screen.availWidth < 1020) return 6;
+    return 4;
+
+  }
+
   useEffect(async () => {
     await getUserInfo();
   }, []);
@@ -51,10 +58,10 @@ export default function Movies({ currentUser }) {
     setLoading(true);
     try {
       const resultSeen = await AuthenticatedRequest(currentUser).get(
-        `/api/movies/${userGroupId}/group?isSeen=1&perPage=6`
+        `/api/movies/${userGroupId}/group?isSeen=1&perPage=${perPage()}`
       );
       const resultUnseen = await AuthenticatedRequest(currentUser).get(
-        `/api/movies/${userGroupId}/group?isSeen=0&perPage=6`
+        `/api/movies/${userGroupId}/group?isSeen=0&perPage=${perPage()}`
       );
 
       setMySeenMovies(resultSeen.data);
