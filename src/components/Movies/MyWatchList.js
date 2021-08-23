@@ -2,13 +2,13 @@ import React from "react";
 import { Card, Button } from "react-bootstrap";
 import ReactLoading from "react-loading";
 
-export default function MyWatchList({ loading, movies, markAsSeen, seen }) {
+export default function MyWatchList({ loading, movies, markAsSeen, seen, getNewMoviePage }) {
   var moviesArray = movies?.data ? movies.data : [];
   var nextPageUrl = movies?.next_page_url ? movies.next_page_url : false;
   var prevPageUrl = movies?.prev_page_url ? movies.prev_page_url : false;
 
   const handleMoreResults = (newPageUrl) => {
-    console.log(newPageUrl);
+    getNewMoviePage(newPageUrl, seen);
   };
 
   return (
@@ -62,8 +62,8 @@ export default function MyWatchList({ loading, movies, markAsSeen, seen }) {
             )}
             {prevPageUrl && (
               <Button
-                disabled={!nextPageUrl}
-                onClick={() => handleMoreResults(nextPageUrl)}
+                disabled={!prevPageUrl}
+                onClick={() => handleMoreResults(prevPageUrl)}
                 style={{float: 'left'}}
               >
                 Previous Page

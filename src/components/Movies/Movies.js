@@ -65,6 +65,21 @@ export default function Movies({ currentUser }) {
     setLoading(false);
   };
 
+  const getNewMoviePage = async (url, isSeen) => {
+    setLoading(true);
+    try {
+      const newMovies = await AuthenticatedRequest(currentUser).get(url);
+      if (isSeen) {
+        return setMySeenMovies(newMovies.data);
+      }
+      return setMyUnseenMovies(newMovies.data);
+    } catch (err) {
+      setError(FormatResponseError(err));
+    } finally{
+      setLoading(false);
+    }
+  };
+
   const markAsSeen = async (movieId) => {
     try {
       setError("");
@@ -158,6 +173,7 @@ export default function Movies({ currentUser }) {
               markAsSeen={markAsSeen}
               movies={unseenMoviesList}
               seen={false}
+              getNewMoviePage={getNewMoviePage}
             />
           </Tab>
           <Tab eventKey="watched-movies-list" title="My Watched Movies">
@@ -166,6 +182,7 @@ export default function Movies({ currentUser }) {
               markAsSeen={markAsSeen}
               movies={seenMoviesList}
               seen={true}
+              getNewMoviePage={getNewMoviePage}
             />
           </Tab>
           <Tab eventKey="random-movie-picker" title="Random Movie Picker">
