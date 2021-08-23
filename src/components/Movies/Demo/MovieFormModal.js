@@ -6,7 +6,8 @@ export default function MovieFormModal({
   show,
   setError,
   setSuccess,
-  moviesList
+  moviesList,
+  FormatResponseError
 }) {
   const titleRef = useRef();
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,7 @@ export default function MovieFormModal({
       setError("Invalid Title");
       return;
     }
+    try {
       setError("");
       setLoading(true);
       const lastIndex = moviesList.length - 1;
@@ -28,9 +30,13 @@ export default function MovieFormModal({
         "rating": null
       });
       handleClose();
-      setLoading(false);
       setSuccess("");
       setSuccess(`Movie "${titleRef.current.value.trim()}" Added Successfully`);
+    } catch (err) {
+      setError(FormatResponseError(err));
+    } finally {
+      setLoading(false);
+    }
 
   }
 

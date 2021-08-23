@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
+import { cloneDeep } from "lodash";
 
 export default function MovieFormModal({
   handleClose,
@@ -8,7 +9,9 @@ export default function MovieFormModal({
   setSuccess,
   request,
   moviesList,
-  groupId
+  groupId,
+  FormatResponseError,
+  setMyUnseenMovies,
 }) {
   const titleRef = useRef();
   const [loading, setLoading] = useState(false);
@@ -24,25 +27,34 @@ export default function MovieFormModal({
     try {
       setError("");
       setLoading(true);
-      await request.post(`/api/movies/${groupId}/add`, {
+      var result = await request.post(`/api/movies/${groupId}/add`, {
         title: titleRef.current.value,
       });
-      const lastIndex = moviesList.length - 1;
-      moviesList.push({
-        id: moviesList[lastIndex]["id"] + 1,
+
+      if (!result?.data?.id) {
+        return setError("Could not obtain new movie ID.");
+      }
+
+      console.log(result.data.id);
+      console.log(moviesList);
+      console.log(moviesList.data);
+      var tempMovieList = cloneDeep(moviesList);
+      tempMovieList.data.push({
+        id: result.data.id,
         title: titleRef.current.value.trim(),
         seen: false,
         rating: null,
       });
+      setMyUnseenMovies(tempMovieList);
       handleClose();
       setLoading(false);
       setSuccess("");
       setSuccess(`Movie "${titleRef.current.value.trim()}" Added Successfully`);
     } catch (err) {
-      var errorMessage = err.response.data.message;
+      console.log(err);
       handleClose();
       setLoading(false);
-      setError(errorMessage);
+      setError(FormatResponseError(err));
     }
   }
 

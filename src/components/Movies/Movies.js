@@ -4,18 +4,20 @@ import MyWatchList from "./MyWatchList";
 import RandomMoviePicker from "./RandomMoviePicker";
 import { useHistory } from "react-router-dom";
 import { Alert, Tabs, Tab, Button } from "react-bootstrap";
-import { findIndex } from "lodash";
+import { findIndex, cloneDeep } from "lodash";
 import MovieFormModal from "./MovieFormModal";
 import AboutMovies from "./AboutMovies";
 import Footer from "../Global/Footer";
-import { AuthenticatedRequest, FormatResponseError } from "../Global/apiCommunication";
+import {
+  AuthenticatedRequest,
+  FormatResponseError,
+} from "../Global/apiCommunication";
 
 export default function Movies({ currentUser }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [seenMoviesList, setMyMovies] = useState([]);
+  const [seenMoviesList, setMySeenMovies] = useState([]);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
-  const [nextPageUrl, setNextPageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [userInfo, setUserInfo] = useState(false);
@@ -30,12 +32,13 @@ export default function Movies({ currentUser }) {
       setUserInfo(result.data);
     } catch (err) {
       setError(FormatResponseError(err));
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  useEffect(() => {
-    getUserInfo();
+  useEffect(async () => {
+    await getUserInfo();
   }, []);
 
   useEffect(() => {
@@ -47,18 +50,15 @@ export default function Movies({ currentUser }) {
   const getMovies = async (userGroupId) => {
     setLoading(true);
     try {
-      const resultSeen = await AuthenticatedRequest(currentUser).get(`/api/movies/${userGroupId}/group?isSeen=1`);
-      const resultUnseen = await AuthenticatedRequest(currentUser).get(`/api/movies/${userGroupId}/group?isSeen=0`);
+      const resultSeen = await AuthenticatedRequest(currentUser).get(
+        `/api/movies/${userGroupId}/group?isSeen=1`
+      );
+      const resultUnseen = await AuthenticatedRequest(currentUser).get(
+        `/api/movies/${userGroupId}/group?isSeen=0`
+      );
 
-      const results = [resultSeen, resultUnseen];
-
-      results.forEach((result, index) => {
-        console.log(result, index);
-        setMyMovies(result.data.data);
-        if (result.data?.next_page_url) {
-          setNextPageUrl(result.data.next_page_url);
-        }
-      });
+      setMySeenMovies(resultSeen.data);
+      setMyUnseenMovies(resultUnseen.data);
     } catch (err) {
       setError(FormatResponseError(err));
     }
@@ -67,22 +67,31 @@ export default function Movies({ currentUser }) {
 
   const markAsSeen = async (movieId) => {
     try {
+      setError("");
+      setSuccess("");
       await AuthenticatedRequest(currentUser).put("/api/movies/mark-as-seen", {
         movieId: movieId,
       });
-      let tempMovieList = moviesList.slice(0);
-      let movieIndex = findIndex(moviesList, {
+      var moviesArray = unseenMoviesList.data;
+      let movieIndex = findIndex(moviesArray, {
         id: movieId,
       });
-      tempMovieList[movieIndex]["seen"] = true;
-
-      setSuccess("");
-      setSuccess(`Movie "${moviesList[movieIndex]["title"]}" marked as seen!`);
-      setMyMovies(tempMovieList);
+      setSuccess(`Movie "${moviesArray[movieIndex]["title"]}" marked as seen!`);
+      setNewMovieLists(moviesArray, movieIndex);
     } catch (err) {
       setError(FormatResponseError(err));
     }
   };
+
+  const setNewMovieLists = (moviesArray, movieIndex) => {
+    let tempMovieList;
+    tempMovieList = cloneDeep(unseenMoviesList);
+    tempMovieList.data.splice(movieIndex, 1);
+    setMyUnseenMovies(tempMovieList);
+    tempMovieList = cloneDeep(seenMoviesList);
+    tempMovieList.data.push(moviesArray[movieIndex]);
+    setMySeenMovies(tempMovieList);
+  }
 
   async function handleLogout() {
     setError("");
@@ -147,8 +156,7 @@ export default function Movies({ currentUser }) {
             <MyWatchList
               loading={loading}
               markAsSeen={markAsSeen}
-              movies={moviesList}
-              nextPageUrl={nextPageUrl}
+              movies={unseenMoviesList}
               seen={false}
             />
           </Tab>
@@ -156,13 +164,12 @@ export default function Movies({ currentUser }) {
             <MyWatchList
               loading={loading}
               markAsSeen={markAsSeen}
-              movies={moviesList}
-              nextPageUrl={nextPageUrl}
+              movies={seenMoviesList}
               seen={true}
             />
           </Tab>
           <Tab eventKey="random-movie-picker" title="Random Movie Picker">
-            <RandomMoviePicker movies={moviesList} />
+            <RandomMoviePicker movies={unseenMoviesList} />
           </Tab>
           <Tab eventKey="about" title="About">
             <AboutMovies />
@@ -176,8 +183,10 @@ export default function Movies({ currentUser }) {
           setError={setError}
           setSuccess={setSuccess}
           request={AuthenticatedRequest(currentUser)}
-          moviesList={moviesList}
+          moviesList={unseenMoviesList}
           groupId={userInfo.group_id}
+          FormatResponseError={FormatResponseError}
+          setMyUnseenMovies={setMyUnseenMovies}
         />
       </div>
       <footer id="footer">

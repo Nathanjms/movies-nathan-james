@@ -5,14 +5,8 @@ export default function RandomMoviePicker({ movies }) {
   const [chosen, setChosen] = useState(false);
   const [choosing, setChoosing] = useState(false);
   const [randomMovie, setRandomMovie] = useState("");
-  var unwatched = [];
 
-  movies.forEach((movie, index) => {
-    if (!movie.seen) {
-      unwatched.push(movie);
-    }
-  });
-  movies = unwatched;
+  movies = movies?.data ? movies.data : [];
 
   function random(array) {
     return array[Math.floor(Math.random() * array.length)];

@@ -17,7 +17,6 @@ export function AuthenticatedRequest(currentUser) {
 }
 
 export const FormatResponseError = (err) => {
-  console.log(err);
   if (err?.response?.status === 401) {
     localStorage.clear();
     return "Authentication Failed. Please login again.";
