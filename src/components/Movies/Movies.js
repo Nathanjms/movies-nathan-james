@@ -51,10 +51,10 @@ export default function Movies({ currentUser }) {
     setLoading(true);
     try {
       const resultSeen = await AuthenticatedRequest(currentUser).get(
-        `/api/movies/${userGroupId}/group?isSeen=1`
+        `/api/movies/${userGroupId}/group?isSeen=1&perPage=6`
       );
       const resultUnseen = await AuthenticatedRequest(currentUser).get(
-        `/api/movies/${userGroupId}/group?isSeen=0`
+        `/api/movies/${userGroupId}/group?isSeen=0&perPage=6`
       );
 
       setMySeenMovies(resultSeen.data);
