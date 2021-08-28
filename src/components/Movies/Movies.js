@@ -78,7 +78,6 @@ export default function Movies({ currentUser }) {
   };
 
   const getNewMoviePage = async (url, isSeen) => {
-    setLoading(true);
     if (process.env.NODE_ENV === "production") {
       url = url.replace("http:", "https:");
     }
@@ -90,8 +89,6 @@ export default function Movies({ currentUser }) {
       return setMyUnseenMovies(newMovies.data);
     } catch (err) {
       setError(FormatResponseError(err));
-    } finally {
-      setLoading(false);
     }
   };
 
