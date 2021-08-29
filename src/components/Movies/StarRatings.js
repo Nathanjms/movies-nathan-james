@@ -1,12 +1,18 @@
 import React from "react";
 
-export default function StarRatings({ movieId, movieRating }) {
+export default function StarRatings({ movieId, movieRating, request }) {
   const starRatings = [5, 4, 3, 2, 1];
 
-  const handleChange = (starRating) => {
-    console.log("Rating: " + starRating);
-    console.log("Movie ID: " + movieId);
-    //TODO: post this data
+  const handleChange = async (starRating) => {
+    try {
+      var result = await request.put(`/api/movies/rate`, {
+        movieId: movieId,
+        rating: starRating,
+      });
+      console.log(result); //TODO: Remove after testing. If status 201, success toastr.Í
+    } catch (error) {
+      console.log(error); //TODO: Remove after testing.
+    }
   };
 
   return (
@@ -14,7 +20,6 @@ export default function StarRatings({ movieId, movieRating }) {
       <span>Rating: </span>
       <div className="star-rating">
         {starRatings.map((starRating, index) => {
-          console.log(movieRating);
           return (
             <React.Fragment key={index}>
               <input

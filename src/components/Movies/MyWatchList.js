@@ -9,6 +9,7 @@ export default function MyWatchList({
   markAsSeen,
   seen,
   getNewMoviePage,
+  request
 }) {
   var moviesArray = movies?.data ? movies.data : [];
   var nextPageUrl = movies?.next_page_url ? movies.next_page_url : false;
@@ -57,6 +58,7 @@ export default function MyWatchList({
                     <StarRatings
                       movieId={movie.id}
                       movieRating={movie.rating ?? 0}
+                      request={request}
                     />
                   )}
                 </Card.Body>
