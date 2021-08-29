@@ -12,21 +12,25 @@ import {
   AuthenticatedRequest,
   FormatResponseError,
 } from "../Global/apiCommunication";
+import ReactLoading from "react-loading";
 
 export default function Movies({ currentUser }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
+  const [moviesHaveChanged, setMoviesHaveChanged] = useState(false);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [userInfo, setUserInfo] = useState(false);
   const history = useHistory();
 
+  const AuthRequest = AuthenticatedRequest(currentUser);
+
   const getUserInfo = async () => {
     setLoading(true);
     try {
-      const result = await AuthenticatedRequest(currentUser).post(
+      const result = await AuthRequest.post(
         "/api/movies/user-info"
       );
       setUserInfo(result.data);
@@ -57,16 +61,12 @@ export default function Movies({ currentUser }) {
   const getAllMovies = async (userGroupId) => {
     setLoading(true);
     try {
-      const resultSeen = await AuthenticatedRequest(currentUser).get(
+      const resultSeen = await AuthRequest.get(
         `/api/movies/${userGroupId}/group?isSeen=1&perPage=${perPage()}`
       );
-      const resultUnseen = await AuthenticatedRequest(currentUser).get(
+      const resultUnseen = await AuthRequest.get(
         `/api/movies/${userGroupId}/group?isSeen=0&perPage=${perPage()}`
       );
-      const resultAllUnseen = await AuthenticatedRequest(currentUser).get(
-        `/api/movies/${userGroupId}/group?isSeen=0&perPage=200`
-      ); //TODO: Get this array when doing the random movie selection.
-
       setMySeenMovies(resultSeen.data);
       setMyUnseenMovies(resultUnseen.data);
     } catch (err) {
@@ -80,7 +80,7 @@ export default function Movies({ currentUser }) {
       url = url.replace("http:", "https:");
     }
     try {
-      const newMovies = await AuthenticatedRequest(currentUser).get(url);
+      const newMovies = await AuthRequest.get(url);
       if (isSeen) {
         return setMySeenMovies(newMovies.data);
       }
@@ -94,7 +94,7 @@ export default function Movies({ currentUser }) {
     try {
       setError("");
       setSuccess("");
-      await AuthenticatedRequest(currentUser).put("/api/movies/mark-as-seen", {
+      await AuthRequest.put("/api/movies/mark-as-seen", {
         movieId: movieId,
       });
       var moviesArray = unseenMoviesList.data;
@@ -102,6 +102,7 @@ export default function Movies({ currentUser }) {
         id: movieId,
       });
       setSuccess(`Movie "${moviesArray[movieIndex]["title"]}" marked as seen!`);
+      setMoviesHaveChanged(true);
       setNewMovieLists(moviesArray, movieIndex);
     } catch (err) {
       setError(FormatResponseError(err));
@@ -122,7 +123,7 @@ export default function Movies({ currentUser }) {
     setError("");
     localStorage.clear();
     try {
-      await AuthenticatedRequest(currentUser).post("/api/logout");
+      await AuthRequest.post("/api/logout");
     } catch (err) {
     } finally {
       history.push("/login");
@@ -196,7 +197,22 @@ export default function Movies({ currentUser }) {
             />
           </Tab>
           <Tab eventKey="random-movie-picker" title="Random Movie Picker">
-            <RandomMoviePicker currentUser={currentUser} groupId={userInfo.group_id} />
+            {!userInfo?.group_id ? (
+              <div className="col-lg-12 d-flex row justify-content-center">
+                <div className="col-lg-12">
+                  <h3>Loading Random Movie Picker...</h3>
+                </div>
+                <div>
+                  <ReactLoading height={30} width={30} type={"spin"} />
+                </div>
+              </div>
+            ) : (
+              <RandomMoviePicker
+                request={AuthRequest}
+                groupId={userInfo.group_id}
+                moviesHaveChanged={moviesHaveChanged} 
+              />
+            )}
           </Tab>
           <Tab eventKey="about" title="About">
             <AboutMovies />
@@ -209,7 +225,7 @@ export default function Movies({ currentUser }) {
           show={show}
           setError={setError}
           setSuccess={setSuccess}
-          request={AuthenticatedRequest(currentUser)}
+          request={AuthRequest}
           moviesList={unseenMoviesList}
           groupId={userInfo.group_id}
           FormatResponseError={FormatResponseError}

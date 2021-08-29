@@ -1,24 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { Card, Button } from "react-bootstrap";
-import {
-  AuthenticatedRequest,
-} from "../Global/apiCommunication";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState } from "react";
+import { Card, Button, Alert } from "react-bootstrap";
 
-export default function RandomMoviePicker({ currentUser, groupId }) {
+export default function RandomMoviePicker({ request, groupId }) {
   const [chosen, setChosen] = useState(false);
   const [choosing, setChoosing] = useState(false);
   const [randomMovie, setRandomMovie] = useState("");
-  let movies = [];
-  const getAllMovies = async () => {
-    movies = await AuthenticatedRequest(currentUser).get(
-      `/api/movies/${groupId}/group?isSeen=0&perPage=200`
-    ); //TODO: Get this array when doing the random movie selection.;
-    console.log(movies);
-  }
+  const [noMovies, setNoMovies] = useState(false);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
-  useEffect(async () => {
-    await getAllMovies();
-  }, []);
+  const getAllMovies = async () => {
+    try {
+      const response = await request.get(
+        `/api/movies/${groupId}/group?isSeen=0&perPage=200`
+      );
+      return response.data.data;
+    } catch (error) {
+      setError("Error");
+      return [];
+    }
+  };
 
   function random(array) {
     return array[Math.floor(Math.random() * array.length)];
@@ -27,29 +29,46 @@ export default function RandomMoviePicker({ currentUser, groupId }) {
   const wait = (delay, ...args) =>
     new Promise((resolve) => setTimeout(resolve, delay, ...args));
 
-  const chooseMovie = async (movies) => {
+  const chooseMovie = async () => {
+    setNoMovies(false);
     setChoosing(true);
     setChosen(false);
-    var i = 20;
-    if (movies.length === 1) { // If only one, chose it instantly! 
-      // TODO: Add message when this is the case.
-      i = 1;
+    setRandomMovie("");
+    setMessage("");
+    var movies = await getAllMovies();
+    if (!movies) {
+      setError("Error");
     }
-    while (i > 0) {
-      var movie = random(movies);
-      setRandomMovie(movie.title);
-      await wait(20 * i);
-      i--;
+    if (movies.length === 0) {
+      setNoMovies(true);
     }
-    setChosen(movie.title);
+    if (movies.length > 0) {
+      var i = 20;
+      if (movies.length === 1) {
+        // If only one, chose it instantly!
+        setMessage("Its not random when there's only one movie!");
+        i = 1;
+      }
+      while (i > 0) {
+        var movie = random(movies);
+        setRandomMovie(movie.title);
+        await wait(20 * i);
+        i--;
+      }
+      setChosen(movie.title);
+    }
     setChoosing(false);
   };
 
-  const movieCardContent = (movies, randomMovie, chosen) => {
-    if (movies.length === 0) {
+  const movieCardContent = (noMovies, randomMovie, chosen) => {
+    if (noMovies) {
       return (
         <div className="col-lg-12">
           <h3>There are no movies to choose from!</h3>
+          <small>Added movies? Click below to try again!</small>
+          <Button disabled={choosing} onClick={() => chooseMovie()}>
+            Find a Movie!
+          </Button>
         </div>
       );
     }
@@ -58,10 +77,10 @@ export default function RandomMoviePicker({ currentUser, groupId }) {
         <div className="col-lg-12 pb-2">
           <h4>What Will I Choose?</h4>
         </div>
-        <Button disabled={choosing} onClick={() => chooseMovie(movies)}>
+        <Button disabled={choosing} onClick={() => chooseMovie()}>
           Find a Movie!
         </Button>
-        {randomMovie.length > 0 && !chosen && (
+        {choosing && (
           <div className="col-lg-12 mt-5">
             <h3 className="pb-5">Choosing...</h3>
             <h4>{randomMovie}</h4>
@@ -69,6 +88,11 @@ export default function RandomMoviePicker({ currentUser, groupId }) {
         )}
         {chosen && (
           <div className="col-lg-12 mt-5">
+            {message && (
+              <Alert className="w-100" variant="info">
+                {message}
+              </Alert>
+            )}
             <h3 className="pb-5">I have selected:</h3>
             <h4>{randomMovie}</h4>
           </div>
@@ -83,9 +107,20 @@ export default function RandomMoviePicker({ currentUser, groupId }) {
         <h3 className="text-center pb-5">Random Movie Picker</h3>
       </div>
       <div className="col-lg-12 d-flex justify-content-center">
-        <div className="text-center mt-2 row justify-content-center" id="randomMovieDiv">
+        <div
+          className="text-center mt-2 row justify-content-center"
+          id="randomMovieDiv"
+        >
+          {error && (
+            <Alert className="w-100" variant="danger">
+              {error}
+            </Alert>
+          )}
+
           <Card.Body className="random-movie-card">
-            {movieCardContent(movies, randomMovie, chosen)}
+            {error || noMovies
+              ? movieCardContent(true, randomMovie, chosen)
+              : movieCardContent(false, randomMovie, chosen)}
           </Card.Body>
         </div>
       </div>
