@@ -1,8 +1,15 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
 import ReactLoading from "react-loading";
+import StarRatings from "./StarRatings";
 
-export default function MyWatchList({ loading, movies, markAsSeen, seen, getNewMoviePage }) {
+export default function MyWatchList({
+  loading,
+  movies,
+  markAsSeen,
+  seen,
+  getNewMoviePage,
+}) {
   var moviesArray = movies?.data ? movies.data : [];
   var nextPageUrl = movies?.next_page_url ? movies.next_page_url : false;
   var prevPageUrl = movies?.prev_page_url ? movies.prev_page_url : false;
@@ -46,6 +53,12 @@ export default function MyWatchList({ loading, movies, markAsSeen, seen, getNewM
                       Seen It!
                     </Button>
                   )}
+                  {seen && (
+                    <StarRatings
+                      movieId={movie.id}
+                      movieRating={movie.rating ?? 0}
+                    />
+                  )}
                 </Card.Body>
               </div>
             );
@@ -55,7 +68,7 @@ export default function MyWatchList({ loading, movies, markAsSeen, seen, getNewM
               <Button
                 disabled={!nextPageUrl}
                 onClick={() => handleMoreResults(nextPageUrl)}
-                style={{float: 'right'}}
+                style={{ float: "right" }}
               >
                 Next Page
               </Button>
@@ -64,7 +77,7 @@ export default function MyWatchList({ loading, movies, markAsSeen, seen, getNewM
               <Button
                 disabled={!prevPageUrl}
                 onClick={() => handleMoreResults(prevPageUrl)}
-                style={{float: 'left'}}
+                style={{ float: "left" }}
               >
                 Previous Page
               </Button>
