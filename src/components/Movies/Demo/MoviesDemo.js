@@ -50,13 +50,21 @@ export default function MoviesDemo() {
   };
 
   const markAsSeen = async (movieId) => {
-    let tempMovieList = unseenMoviesList.slice(0);
     let movieIndex = findIndex(unseenMoviesList, {
       id: movieId,
     });
-    tempMovieList[movieIndex]["seen"] = true;
-    setSuccess(`Movie "${tempMovieList[movieIndex]["title"]}" marked as seen!`);
+    setNewMovieLists(unseenMoviesList, movieIndex)
+    setSuccess(`Movie "${unseenMoviesList[movieIndex]["title"]}" marked as seen!`);
+  };
+
+  const setNewMovieLists = (moviesArray, movieIndex) => {
+    let tempMovieList;
+    tempMovieList = unseenMoviesList.slice(0);
+    tempMovieList.splice(movieIndex, 1);
     setMyUnseenMovies(tempMovieList);
+    tempMovieList = seenMoviesList.slice(0);
+    tempMovieList.push(moviesArray[movieIndex]);
+    setMySeenMovies(tempMovieList);
   };
 
   return (
