@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import MyWatchList from "./MyWatchList";
 import RandomMoviePicker from "./RandomMoviePicker";
 import { useHistory } from "react-router-dom";
@@ -13,26 +13,27 @@ import {
   FormatResponseError,
 } from "../Global/apiCommunication";
 import ReactLoading from "react-loading";
+import { UserContext } from "../User/UserContext";
 
-export default function Movies({ currentUser }) {
+export default function Movies({ userToken }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
-  const [userInfo, setUserInfo] = useState(false);
   const history = useHistory();
 
-  const AuthRequest = AuthenticatedRequest(currentUser);
+  const { user, setUser } = useContext(UserContext);
+
+  const AuthRequest = AuthenticatedRequest(userToken);
 
   const getUserInfo = async () => {
     setLoading(true);
+    console.log("Get User Data");
     try {
-      const result = await AuthRequest.post(
-        "/api/movies/user-info"
-      );
-      setUserInfo(result.data);
+      const result = await AuthRequest.post("/api/movies/user-info");
+      setUser(result.data);
     } catch (err) {
       setError(FormatResponseError(err));
     } finally {
@@ -48,16 +49,19 @@ export default function Movies({ currentUser }) {
   };
 
   useEffect(async () => {
+    console.log("Movies Component rendered");
+    console.log(user);
     await getUserInfo();
   }, []);
 
   useEffect(() => {
-    if (userInfo?.group_id > 0) {
-      getAllMovies(userInfo.group_id);
+    if (user?.group_id > 0) {
+      getAllMovies(user.group_id);
     }
-  }, [userInfo]);
+  }, [user]);
 
   const getAllMovies = async (userGroupId) => {
+    console.log(`getAllMovies, group ID: ${userGroupId}`);
     setLoading(true);
     try {
       const resultSeen = await AuthRequest.get(
@@ -150,10 +154,10 @@ export default function Movies({ currentUser }) {
           </div>
           <div className="col-lg-12 pb-4">
             <h5 className="text-center pt-5">
-              Name: {loading ? "Loading..." : `${userInfo.user_name}`}
+              Name: {loading ? "Loading..." : `${user.user_name}`}
             </h5>
             <h5 className="text-center">
-              Group: {loading ? "Loading..." : `${userInfo.group_name}`}
+              Group: {loading ? "Loading..." : `${user.group_name}`}
             </h5>
           </div>
           {error && (
@@ -169,25 +173,35 @@ export default function Movies({ currentUser }) {
         </div>
         <Tabs defaultActiveKey="movies-list" id="tabs">
           <Tab eventKey="movies-list" title="My Watch List">
-            <Button
-              variant="primary"
-              className="mt-3"
-              onClick={() => setShow(true)}
-            >
-              Add a new Film!
-            </Button>
-
-            <MyWatchList
-              loading={loading}
-              markAsSeen={markAsSeen}
-              movies={unseenMoviesList}
-              seen={false}
-              getNewMoviePage={getNewMoviePage}
-            />
+            {loading ? (
+              <div className="col-lg-12 d-flex row justify-content-center">
+                <div className="col-lg-12">
+                  <h3>Loading Movies...</h3>
+                </div>
+                <div>
+                  <ReactLoading height={30} width={30} type={"spin"} />
+                </div>
+              </div>
+            ) : (
+              <>
+                <Button
+                  variant="primary"
+                  className="mt-3"
+                  onClick={() => setShow(true)}
+                >
+                  Add a new Film!
+                </Button>
+                <MyWatchList
+                  markAsSeen={markAsSeen}
+                  movies={unseenMoviesList}
+                  seen={false}
+                  getNewMoviePage={getNewMoviePage}
+                />
+              </>
+            )}
           </Tab>
           <Tab eventKey="watched-movies-list" title="My Watched Movies">
             <MyWatchList
-              loading={loading}
               markAsSeen={markAsSeen}
               movies={seenMoviesList}
               seen={true}
@@ -196,7 +210,7 @@ export default function Movies({ currentUser }) {
             />
           </Tab>
           <Tab eventKey="random-movie-picker" title="Random Movie Picker">
-            {!userInfo?.group_id ? (
+            {!user?.group_id ? (
               <div className="col-lg-12 d-flex row justify-content-center">
                 <div className="col-lg-12">
                   <h3>Loading Random Movie Picker...</h3>
@@ -208,7 +222,7 @@ export default function Movies({ currentUser }) {
             ) : (
               <RandomMoviePicker
                 request={AuthRequest}
-                groupId={userInfo.group_id}
+                groupId={user.group_id}
               />
             )}
           </Tab>
@@ -225,7 +239,7 @@ export default function Movies({ currentUser }) {
           setSuccess={setSuccess}
           request={AuthRequest}
           moviesList={unseenMoviesList}
-          groupId={userInfo.group_id}
+          groupId={user.group_id}
           FormatResponseError={FormatResponseError}
           setMyUnseenMovies={setMyUnseenMovies}
         />

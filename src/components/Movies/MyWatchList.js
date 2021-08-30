@@ -4,7 +4,6 @@ import ReactLoading from "react-loading";
 import StarRatings from "./StarRatings";
 
 export default function MyWatchList({
-  loading,
   movies,
   markAsSeen,
   seen,
@@ -32,17 +31,7 @@ export default function MyWatchList({
       </div>
       <div className="col-lg-12 d-flex justify-content-center">
         <div className="w-100 text-center mt-2 row justify-content-center">
-          {loading && (
-            <div className="col-lg-12 d-flex row justify-content-center">
-              <div className="col-lg-12">
-                <h3>Loading Movies...</h3>
-              </div>
-              <div>
-                <ReactLoading height={30} width={30} type={"spin"} />
-              </div>
-            </div>
-          )}
-          {moviesArray.length === 0 && !loading && (
+          {moviesArray.length === 0 && (
             <div className="col-lg-12">
               <h3>You've not added any movies yet!</h3>
             </div>
