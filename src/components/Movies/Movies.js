@@ -18,7 +18,6 @@ export default function Movies({ currentUser }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
-  const [moviesHaveChanged, setMoviesHaveChanged] = useState(false);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
@@ -102,7 +101,6 @@ export default function Movies({ currentUser }) {
         id: movieId,
       });
       setSuccess(`Movie "${moviesArray[movieIndex]["title"]}" marked as seen!`);
-      setMoviesHaveChanged(true);
       setNewMovieLists(moviesArray, movieIndex);
     } catch (err) {
       setError(FormatResponseError(err));
@@ -194,6 +192,7 @@ export default function Movies({ currentUser }) {
               movies={seenMoviesList}
               seen={true}
               getNewMoviePage={getNewMoviePage}
+              request={AuthRequest}
             />
           </Tab>
           <Tab eventKey="random-movie-picker" title="Random Movie Picker">
@@ -210,7 +209,6 @@ export default function Movies({ currentUser }) {
               <RandomMoviePicker
                 request={AuthRequest}
                 groupId={userInfo.group_id}
-                moviesHaveChanged={moviesHaveChanged} 
               />
             )}
           </Tab>

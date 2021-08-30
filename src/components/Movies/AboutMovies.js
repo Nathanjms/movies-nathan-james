@@ -56,27 +56,32 @@ export default function AboutMovies() {
                 <strike>Add demo section for people without an account</strike>{" "}
                 - Added 23/05/21
               </li>
-              <li>Star Rating system for watched movies</li>
+              <li>
+                <strike>Star Rating system for watched movies</strike> - Added
+                30/08/21
+              </li>
               <li>Allow users to be in more than one group</li>
               <ul>
                 <li>Potentially have an individual movie list too</li>
               </ul>
               <li>
                 Make demo and regular movie section's JavaScript files match
-                closer to make code more dry.
+                closer to follow the DRY convention.
               </li>
-              <li><strike>Switch backend to Laravel API</strike> - Added 22/08/21</li>
+              <li>
+                <strike>Switch backend to use a Laravel API</strike> - Added 22/08/21
+              </li>
               <ul>
                 <li>
-                  Including the user's system from Firebase, so the users and
-                  the movies are stored in the same place.
+                  <strike>
+                    Including the user's system from Firebase, so the users and
+                    the movies are stored in the same place.
+                  </strike>
                 </li>
               </ul>
               <li>Random Movie Picker - styling improvements</li>
               <ul>
-                <li>
-                  General styling - maybe use two cards instead of one.
-                </li>
+                <li>General styling - maybe use two cards instead of one.</li>
                 <li>
                   Pick Movie button to be more dynamic, maybe disappear when
                   choosing, then say 'Choose again?' afterwards.

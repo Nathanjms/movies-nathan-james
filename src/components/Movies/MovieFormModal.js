@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { cloneDeep } from "lodash";
+import { FormatResponseError } from "../Global/apiCommunication";
 
 export default function MovieFormModal({
   handleClose,
@@ -10,8 +11,8 @@ export default function MovieFormModal({
   request,
   moviesList,
   groupId,
-  FormatResponseError,
   setMyUnseenMovies,
+  demo = false,
 }) {
   const titleRef = useRef();
   const [loading, setLoading] = useState(false);
@@ -27,21 +28,37 @@ export default function MovieFormModal({
     try {
       setError("");
       setLoading(true);
-      var result = await request.post(`/api/movies/${groupId}/add`, {
-        title: titleRef.current.value,
-      });
+      console.log(demo);
+      if (!demo) {
+        var result = await request.post(`/api/movies/${groupId}/add`, {
+          title: titleRef.current.value,
+        });
 
-      if (!result?.data?.id) {
-        return setError("Could not obtain new movie ID.");
+        if (!result?.data?.id) {
+          return setError("Could not obtain new movie ID.");
+        }
+        console.log('test');
       }
+      const lastIndex = moviesList.length - 1;
+      console.log(moviesList);
 
       var tempMovieList = cloneDeep(moviesList);
-      tempMovieList.data.push({
-        id: result.data.id,
-        title: titleRef.current.value.trim(),
-        seen: false,
-        rating: null,
-      });
+      console.log(tempMovieList);
+      if (demo) {
+        tempMovieList.push({
+          id: demo ? lastIndex + 1 : result.data.id,
+          title: titleRef.current.value.trim(),
+          seen: false,
+          rating: null,
+        });
+      } else {
+        tempMovieList.data.push({
+          id: result.data.id,
+          title: titleRef.current.value.trim(),
+          seen: false,
+          rating: null,
+        });
+      }
       setMyUnseenMovies(tempMovieList);
       handleClose();
       setLoading(false);

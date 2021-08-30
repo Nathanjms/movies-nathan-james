@@ -2,13 +2,19 @@
   text-align: center;
 }
 
+:root {
+  --primary: #7B26AD;
+  --teal: #269BAD;
+  --teal2: #34BDD2;
+}
+
 ::selection {
-  background-color: #7b26ad;
+  background-color: var(--primary);
   color: #fff;
 }
 
 ::-moz-selection {
-  background-color: #7b26ad;
+  background-color: var(--primary);
   color: #fff;
 }
 
@@ -20,8 +26,23 @@ body {
 }
 
 .btn-primary {
-  background-color: #7b26ad;
-  border: 1px solid #7b26ad;
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+  background-color: #269BAD;
+  border: 1px solid #269BAD;
+}
+
+a {
+  color:var(--teal);
+}
+
+a:hover {
+  color: var(--teal2);
 }
 
 .modal-content {
@@ -89,35 +110,6 @@ body {
 }
 
 /*--------------------------------------------------------------
-# Header
---------------------------------------------------------------*/
-#header {
-  position: fixed;
-  bottom: 0;
-  z-index: 9997;
-  transition: all 0.5s;
-  padding: 15px;
-  overflow-y: auto;
-}
-
-@media (min-width: 768px) {
-  #header {
-    justify-content: center;
-    flex-direction: column;
-    top: 0;
-    left: 0;
-  }
-}
-
-@media (max-width: 767px) {
-  #header {
-    justify-content: space-evenly;
-    flex-direction: row;
-    right: 0;
-  }
-}
-
-/*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
 
@@ -135,137 +127,6 @@ body {
 }
 
 /*--------------------------------------------------------------
-# Navigation Menu
---------------------------------------------------------------*/
-.navBar * {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.navBar {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.navBar > ul > li {
-  position: relative;
-  white-space: nowrap;
-  border-color: #282c34;
-  display: inline;
-}
-
-.navBar a {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
-
-.navBar a:hover span,
-.navBar li:hover > a span {
-  display: block;
-}
-
-.navBar a i {
-  font-size: 20px;
-}
-
-.navBar a span {
-  padding: 0 5px 0 7px;
-  color: #45505b;
-}
-
-.navBar a:hover,
-.navBar .active > a,
-.navBar li:hover > a {
-  color: #fff;
-  background: #7b26ad;
-}
-
-.navBar a:hover span,
-.navBar .active > a span,
-.navBar li:hover > a span {
-  color: #fff;
-}
-
-.navBar a:hover,
-.navBar li:hover > a {
-  width: 100%;
-  color: #fff;
-}
-
-.button-logos {
-  color: #45505b;
-  padding: 10px 12px;
-  transition: 0.3s;
-  border-radius: 20px;
-  background: #f2f3f5;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.button-shape {
-  color: #45505b;
-  padding: 10px 20px;
-  transition: 0.3s;
-  font-size: 15px;
-  border-radius: 20px;
-  background: #f2f3f5;
-  height: 56px;
-  width: 100%;
-  overflow: hidden;
-  transition: 0.3s;
-  width: 56px;
-}
-
-.btn-clicked {
-  background-color: #7b26ad;
-  color: #fff !important;
-}
-
-.mobile-button {
-  margin-bottom: 1rem;
-}
-
-@media (min-width: 768px) {
-  .navBar a {
-    margin-bottom: 20px;
-  }
-  .navBar a span {
-    display: none;
-    color: #fff;
-  }
-  .navBar a:hover span,
-  .navBar li:hover > a span {
-    display: block;
-  }
-  .mobile-button {
-    display: none;
-  }
-}
-
-@media (max-width: 767px) {
-  .navBar a {
-    margin-bottom: 5px;
-  }
-  .navBar ul {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-bottom: 1rem;
-  }
-  .navBar a span {
-    display: none;
-    color: #fff;
-  }
-  .hide-nav {
-    display: none !important;
-  }
-}
-
-/*--------------------------------------------------------------
 # Login
 --------------------------------------------------------------*/
 
@@ -274,57 +135,8 @@ body {
 }
 
 .inline-loading {
-  color:#7b26ad;
+  color: var(--primary);
   display: inline-block;
-}
-
-/*--------------------------------------------------------------
-# Skills
---------------------------------------------------------------*/
-
-.progress {
-  height: 0.25rem;
-}
-.progress-bar {
-  background-color: #7b26ad;
-}
-
-.rating-card {
-  padding: 20px;
-  margin: 10px;
-  background-color: #3d4148;
-  border-radius: 15px;
-  cursor: pointer;
-}
-
-/*--------------------------------------------------------------
-# Education
---------------------------------------------------------------*/
-.education-card {
-  padding: 20px;
-  margin-top: 2rem;
-  background-color: #282c34;
-  border-radius: 15px;
-  text-align: left;
-  width: 100%;
-}
-
-.university-sub-header {
-  margin-bottom: 1rem;
-}
-
-.edu-accord-header {
-  background-color: #3d4148;
-  margin-top: 1rem;
-  border-radius: 10px 10px 0 0;
-  text-align: left;
-  width: 100%;
-  cursor: pointer;
-}
-
-#education .card-body {
-  background-color: #3d4148;
-  border-radius: 0 0 10px 10px;
 }
 
 /*--------------------------------------------------------------
@@ -344,6 +156,11 @@ body {
 #movies .btn-primary {
   background-color: #282c34;
   border: 1px solid #3d4148;
+}
+
+#movies .btn-primary:hover {
+  background-color: #3d4148;
+  border: 1px solid #282c34;
 }
 
 .random-movie-card {
@@ -370,4 +187,42 @@ body {
   font-size: 15px;
   border-radius: 20px;
   background: #f2f3f5;
+}
+
+.swal2-confirm.btn-success {
+  background-color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.swal2-confirm.btn-success:active,
+.swal2-confirm.btn-success:hover {
+  background-color: var(--teal) !important;
+  border: 1px solid var(--teal) !important;
+}
+
+/*--------------------------------------------------------------
+# Movies - Star Ratings
+--------------------------------------------------------------*/
+.star-rating {
+  direction: rtl;
+  display: inline-block;
+}
+
+.star-rating input[type="radio"] {
+  display: none;
+}
+
+.star-rating label {
+  color: #bbb;
+  font-size: 18px;
+  padding: 0;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input[type="radio"]:checked ~ label {
+  color: var(--primary);
 }

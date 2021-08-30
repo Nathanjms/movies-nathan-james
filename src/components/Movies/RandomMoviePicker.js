@@ -1,8 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
-
-export default function RandomMoviePicker({ request, groupId }) {
+import { FormatResponseError } from "../Global/apiCommunication";
+export default function RandomMoviePicker({
+  request,
+  groupId,
+  demo = false,
+  demoMovies = [],
+}) {
   const [chosen, setChosen] = useState(false);
   const [choosing, setChoosing] = useState(false);
   const [randomMovie, setRandomMovie] = useState("");
@@ -11,13 +16,16 @@ export default function RandomMoviePicker({ request, groupId }) {
   const [message, setMessage] = useState("");
 
   const getAllMovies = async () => {
+    if (demo) {
+      return demoMovies;
+    }
     try {
       const response = await request.get(
         `/api/movies/${groupId}/group?isSeen=0&perPage=200`
       );
       return response.data.data;
     } catch (error) {
-      setError("Error");
+      setError(FormatResponseError(error));
       return [];
     }
   };
@@ -38,22 +46,22 @@ export default function RandomMoviePicker({ request, groupId }) {
     var movies = await getAllMovies();
     if (!movies) {
       setError("Error");
-    }
-    if (movies.length === 0) {
+    } else if (movies.length === 0) {
       setNoMovies(true);
-    }
-    if (movies.length > 0) {
-      var i = 20;
+    } else if (movies.length > 0) {
+      var i = 0;
       if (movies.length === 1) {
         // If only one, chose it instantly!
         setMessage("Its not random when there's only one movie!");
-        i = 1;
+        i = 21;
       }
-      while (i > 0) {
+      var modifier = 1;
+      while (i < 50) {
         var movie = random(movies);
         setRandomMovie(movie.title);
-        await wait(20 * i);
-        i--;
+        modifier = i > 40 ? modifier + 1 : modifier;
+        await wait(30 * modifier);
+        i++;
       }
       setChosen(movie.title);
     }
@@ -66,9 +74,11 @@ export default function RandomMoviePicker({ request, groupId }) {
         <div className="col-lg-12">
           <h3>There are no movies to choose from!</h3>
           <small>Added movies? Click below to try again!</small>
-          <Button disabled={choosing} onClick={() => chooseMovie()}>
-            Find a Movie!
-          </Button>
+          <div className="text-center">
+            <Button disabled={choosing} onClick={() => chooseMovie()}>
+              Find a Movie!
+            </Button>
+          </div>
         </div>
       );
     }
