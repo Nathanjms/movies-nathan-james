@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
-
+import { FormatResponseError } from "../Global/apiCommunication";
 export default function RandomMoviePicker({ request, groupId }) {
   const [chosen, setChosen] = useState(false);
   const [choosing, setChoosing] = useState(false);
@@ -17,7 +17,7 @@ export default function RandomMoviePicker({ request, groupId }) {
       );
       return response.data.data;
     } catch (error) {
-      setError("Error");
+      setError(FormatResponseError(error));
       return [];
     }
   };
@@ -38,22 +38,20 @@ export default function RandomMoviePicker({ request, groupId }) {
     var movies = await getAllMovies();
     if (!movies) {
       setError("Error");
-    }
-    if (movies.length === 0) {
+    } else if (movies.length === 0) {
       setNoMovies(true);
-    }
-    if (movies.length > 0) {
-      var i = 20;
+    } else if (movies.length > 0) {
+      var i = 0;
       if (movies.length === 1) {
         // If only one, chose it instantly!
         setMessage("Its not random when there's only one movie!");
-        i = 1;
+        i = 21;
       }
-      while (i > 0) {
+      while (i < 21) {
         var movie = random(movies);
         setRandomMovie(movie.title);
         await wait(20 * i);
-        i--;
+        i++;
       }
       setChosen(movie.title);
     }

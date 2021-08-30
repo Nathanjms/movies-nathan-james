@@ -1,22 +1,40 @@
 import React from "react";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function StarRatings({ movieId, movieRating, request }) {
   const starRatings = [5, 4, 3, 2, 1];
 
   const handleChange = async (starRating) => {
     try {
-      var result = await request.put(`/api/movies/rate`, {
+      await request.put(`/api/movies/rate`, {
         movieId: movieId,
         rating: starRating,
       });
-      console.log(result); //TODO: Remove after testing. If status 201, success toastr.Í
+      toast.success("Rating Added Successfully!");
     } catch (error) {
-      console.log(error); //TODO: Remove after testing.
+      toast.error("Error sending rating to API");
     }
   };
 
   return (
     <div>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          success: {
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+          },
+          error: {
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+          },
+        }}
+      />
       <span>Rating: </span>
       <div className="star-rating">
         {starRatings.map((starRating, index) => {
