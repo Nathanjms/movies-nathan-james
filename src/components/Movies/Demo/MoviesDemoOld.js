@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import MyWatchList from "../MyWatchList";
 import RandomMoviePicker from "../RandomMoviePicker";
-import { Alert, Tabs, Tab, Button } from "react-bootstrap";
-import { findIndex } from "lodash";
-import MovieFormModal from "../MovieFormModal";
 import AboutMovies from "../AboutMovies";
+import { Alert, Tabs, Tab, Button } from "react-bootstrap";
+import MovieFormModal from "./MovieFormModal";
 import Footer from "../../Global/Footer";
-import Swal from "sweetalert2";
+import { findIndex } from "lodash";
 
 export default function MoviesDemo() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [seenMoviesList, setMySeenMovies] = useState([]);
-  const [unseenMoviesList, setMyUnseenMovies] = useState([]);
+  const [moviesList, setMyMovies] = useState([]);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -20,43 +18,17 @@ export default function MoviesDemo() {
   }, []);
 
   const getAllMovies = () => {
-    var allMovies = require("./DemoMovieList.json");
-    var seenMovies = [];
-    var unseenMovies = [];
-    allMovies.forEach((currentVal, index) => {
-      if (currentVal.seen) {
-        seenMovies.push(currentVal);
-      } else {
-        unseenMovies.push(currentVal);
-      }
-    });
-    setMySeenMovies(seenMovies);
-    setMyUnseenMovies(unseenMovies);
+    setMyMovies(require("./DemoMovieList.json"));
   };
 
-  const getNewMoviePage = () => {
-    // Swal.fire("This feature is only available in the full version!");
-    Swal.mixin({
-      customClass: {
-        confirmButton: "btn btn-success",
-      },
-      buttonsStyling: false,
-    }).fire({
-      icon: "info",
-      text: "This feature is only available in the full version!",
-      // timer: 1500,
-      timerProgressBar: true,
-    });
-  };
-
-  const markAsSeen = async (movieId) => {
-    let tempMovieList = unseenMoviesList.slice(0);
-    let movieIndex = findIndex(unseenMoviesList, {
+  const markAsSeen = (movieId) => {
+    let tempMovieList = moviesList.slice(0);
+    let movieIndex = findIndex(moviesList, {
       id: movieId,
     });
     tempMovieList[movieIndex]["seen"] = true;
     setSuccess(`Movie "${tempMovieList[movieIndex]["title"]}" marked as seen!`);
-    setMyUnseenMovies(tempMovieList);
+    setMyMovies(tempMovieList);
   };
 
   return (
@@ -75,7 +47,7 @@ export default function MoviesDemo() {
           </div>
           <div className="col-lg-12">
             <h5 className="text-center">
-              <a href="https://www.nathanjms.co.uk">www.nathanjms.co.uk</a>
+              <a href="https://nathanjms.co.uk">www.nathanjms.co.uk</a>
             </h5>
             <h1 className="text-center">Movies</h1>
             <h4 className="text-center">
@@ -98,7 +70,7 @@ export default function MoviesDemo() {
           )}
         </div>
         <Tabs defaultActiveKey="movies-list" id="tabs">
-          <Tab eventKey="movies-list" title="My Watch List">
+          <Tab eventKey="movies-list" title="My Watch List" style={{paddingBottom: '10px'}}>
             <Button
               variant="primary"
               className="mt-3"
@@ -108,24 +80,24 @@ export default function MoviesDemo() {
             </Button>
 
             <MyWatchList
+              loading={false}
               markAsSeen={markAsSeen}
-              movies={unseenMoviesList}
+              movies={moviesList}
               seen={false}
-              getNewMoviePage={getNewMoviePage}
               demo={true}
             />
           </Tab>
           <Tab eventKey="watched-movies-list" title="My Watched Movies">
             <MyWatchList
+              loading={false}
               markAsSeen={markAsSeen}
-              movies={seenMoviesList}
+              movies={moviesList}
               seen={true}
-              getNewMoviePage={getNewMoviePage}
               demo={true}
             />
           </Tab>
           <Tab eventKey="random-movie-picker" title="Random Movie Picker">
-            <RandomMoviePicker demo={true} demoMovies={unseenMoviesList} />
+            <RandomMoviePicker movies={moviesList} />
           </Tab>
           <Tab eventKey="about" title="About">
             <AboutMovies />
@@ -138,9 +110,7 @@ export default function MoviesDemo() {
           show={show}
           setError={setError}
           setSuccess={setSuccess}
-          moviesList={unseenMoviesList}
-          setMyUnseenMovies={setMyUnseenMovies}
-          demo={true}
+          moviesList={moviesList}
         />
       </div>
       <footer id="footer">

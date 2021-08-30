@@ -9,11 +9,17 @@ export default function MyWatchList({
   markAsSeen,
   seen,
   getNewMoviePage,
-  request
+  request,
+  demo = false,
 }) {
-  var moviesArray = movies?.data ? movies.data : [];
-  var nextPageUrl = movies?.next_page_url ? movies.next_page_url : false;
-  var prevPageUrl = movies?.prev_page_url ? movies.prev_page_url : false;
+  var moviesArray = movies;
+  var nextPageUrl = true;
+  var prevPageUrl = true;
+  if (!demo) {
+    moviesArray = movies?.data ? movies.data : [];
+    nextPageUrl = movies?.next_page_url ? movies.next_page_url : false;
+    prevPageUrl = movies?.prev_page_url ? movies.prev_page_url : false;
+  }
 
   const handleMoreResults = (newPageUrl) => {
     getNewMoviePage(newPageUrl, seen);
@@ -59,6 +65,7 @@ export default function MyWatchList({
                       movieId={movie.id}
                       movieRating={movie.rating ?? 0}
                       request={request}
+                      demo={demo}
                     />
                   )}
                 </Card.Body>

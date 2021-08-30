@@ -1,10 +1,18 @@
 import React from "react";
 import { Toaster, toast } from "react-hot-toast";
 
-export default function StarRatings({ movieId, movieRating, request }) {
+export default function StarRatings({
+  movieId,
+  movieRating,
+  request,
+  demo = false,
+}) {
   const starRatings = [5, 4, 3, 2, 1];
 
   const handleChange = async (starRating) => {
+    if (demo) {
+      return toast.success("Rating Added Successfully!");
+    }
     try {
       await request.put(`/api/movies/rate`, {
         movieId: movieId,

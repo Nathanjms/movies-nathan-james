@@ -2,7 +2,12 @@
 import React, { useState } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
 import { FormatResponseError } from "../Global/apiCommunication";
-export default function RandomMoviePicker({ request, groupId }) {
+export default function RandomMoviePicker({
+  request,
+  groupId,
+  demo = false,
+  demoMovies = [],
+}) {
   const [chosen, setChosen] = useState(false);
   const [choosing, setChoosing] = useState(false);
   const [randomMovie, setRandomMovie] = useState("");
@@ -11,6 +16,9 @@ export default function RandomMoviePicker({ request, groupId }) {
   const [message, setMessage] = useState("");
 
   const getAllMovies = async () => {
+    if (demo) {
+      return demoMovies;
+    }
     try {
       const response = await request.get(
         `/api/movies/${groupId}/group?isSeen=0&perPage=200`
@@ -47,10 +55,12 @@ export default function RandomMoviePicker({ request, groupId }) {
         setMessage("Its not random when there's only one movie!");
         i = 21;
       }
-      while (i < 21) {
+      var modifier = 1;
+      while (i < 50) {
         var movie = random(movies);
         setRandomMovie(movie.title);
-        await wait(20 * i);
+        modifier = i > 40 ? modifier + 1 : modifier;
+        await wait(30 * modifier);
         i++;
       }
       setChosen(movie.title);
@@ -64,9 +74,11 @@ export default function RandomMoviePicker({ request, groupId }) {
         <div className="col-lg-12">
           <h3>There are no movies to choose from!</h3>
           <small>Added movies? Click below to try again!</small>
-          <Button disabled={choosing} onClick={() => chooseMovie()}>
-            Find a Movie!
-          </Button>
+          <div className="text-center">
+            <Button disabled={choosing} onClick={() => chooseMovie()}>
+              Find a Movie!
+            </Button>
+          </div>
         </div>
       );
     }
