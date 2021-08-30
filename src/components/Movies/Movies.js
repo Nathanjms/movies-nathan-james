@@ -29,9 +29,7 @@ export default function Movies({ currentUser }) {
   const getUserInfo = async () => {
     setLoading(true);
     try {
-      const result = await AuthRequest.post(
-        "/api/movies/user-info"
-      );
+      const result = await AuthRequest.post("/api/movies/user-info");
       setUserInfo(result.data);
     } catch (err) {
       setError(FormatResponseError(err));
@@ -169,31 +167,61 @@ export default function Movies({ currentUser }) {
         </div>
         <Tabs defaultActiveKey="movies-list" id="tabs">
           <Tab eventKey="movies-list" title="My Watch List">
-            <Button
-              variant="primary"
-              className="mt-3"
-              onClick={() => setShow(true)}
-            >
-              Add a new Film!
-            </Button>
-
-            <MyWatchList
-              loading={loading}
-              markAsSeen={markAsSeen}
-              movies={unseenMoviesList}
-              seen={false}
-              getNewMoviePage={getNewMoviePage}
-            />
+            {loading ? (
+              <div className="col-lg-12 d-flex row justify-content-center">
+                <div className="col-lg-12">
+                  <h3>Loading Movies...</h3>
+                </div>
+                <div>
+                  <ReactLoading height={30} width={30} type={"spin"} />
+                </div>
+              </div>
+            ) : (
+              <>
+                <Button
+                  variant="primary"
+                  className="mt-3"
+                  onClick={() => setShow(true)}
+                >
+                  Add a new Film!
+                </Button>
+                <MyWatchList
+                  markAsSeen={markAsSeen}
+                  movies={unseenMoviesList}
+                  seen={false}
+                  getNewMoviePage={getNewMoviePage}
+                />
+              </>
+            )}
           </Tab>
           <Tab eventKey="watched-movies-list" title="My Watched Movies">
-            <MyWatchList
-              loading={loading}
-              markAsSeen={markAsSeen}
-              movies={seenMoviesList}
-              seen={true}
-              getNewMoviePage={getNewMoviePage}
-              request={AuthRequest}
-            />
+            {loading ? (
+              <div className="col-lg-12 d-flex row justify-content-center">
+                <div className="col-lg-12">
+                  <h3>Loading Movies...</h3>
+                </div>
+                <div>
+                  <ReactLoading height={30} width={30} type={"spin"} />
+                </div>
+              </div>
+            ) : (
+              <>
+                <Button
+                  variant="primary"
+                  className="mt-3"
+                  onClick={() => setShow(true)}
+                >
+                  Add a new Film!
+                </Button>
+                <MyWatchList
+                  markAsSeen={markAsSeen}
+                  movies={seenMoviesList}
+                  seen={true}
+                  getNewMoviePage={getNewMoviePage}
+                  request={AuthRequest}
+                />
+              </>
+            )}
           </Tab>
           <Tab eventKey="random-movie-picker" title="Random Movie Picker">
             {!userInfo?.group_id ? (
