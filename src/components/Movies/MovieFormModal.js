@@ -50,7 +50,7 @@ export default function MovieFormModal({
 
   return (
     <>
-      <Modal size="lg" show={show} onHide={() => handleClose()}>
+      <Modal centered={true} show={show} onHide={() => handleClose()}>
         <Form onSubmit={handleSubmit}>
           <Modal.Header closeButton>
             <Modal.Title>Add new movie to watch list</Modal.Title>
