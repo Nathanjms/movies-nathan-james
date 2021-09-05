@@ -44,6 +44,7 @@ export default function RandomMoviePicker({
     setRandomMovie("");
     setMessage("");
     var movies = await getAllMovies();
+    var movie;
     if (!movies) {
       setError("Error");
     } else if (movies.length === 0) {
@@ -53,15 +54,17 @@ export default function RandomMoviePicker({
       if (movies.length === 1) {
         // If only one, chose it instantly!
         setMessage("Its not random when there's only one movie!");
-        i = 21;
-      }
-      var modifier = 1;
-      while (i < 50) {
-        var movie = random(movies);
+        movie = movies[0];
         setRandomMovie(movie.title);
-        modifier = i > 40 ? modifier + 1 : modifier;
-        await wait(30 * modifier);
-        i++;
+      } else {
+        var modifier = 1;
+        while (i < 50) {
+          movie = random(movies);
+          setRandomMovie(movie.title);
+          modifier = i > 40 ? modifier + 1 : modifier;
+          await wait(30 * modifier);
+          i++;
+        }
       }
       setChosen(movie.title);
     }
