@@ -1,13 +1,9 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Form, Button, Card, Container, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import ReactLoading from "react-loading";
-import { UserContext } from "./UserContext";
-
-export const baseURL = process.env.NODE_ENV === "development"
-? `http://nathan-laravel-api.test`
-: `https://nathanjms-laravel-api.herokuapp.com`;
+import { baseURL } from "../Global/apiCommunication";
 
 export default function Login() {
   const emailRef = useRef();
@@ -31,7 +27,6 @@ export default function Login() {
             "expiry",
             JSON.stringify(response.data.token.expiration)
           );
-          console.log("success")
           return history.push("/");
         } else {
           setError("Oops! Invalid Response from API");

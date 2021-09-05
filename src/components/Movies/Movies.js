@@ -14,8 +14,9 @@ import {
 } from "../Global/apiCommunication";
 import ReactLoading from "react-loading";
 import { UserContext } from "../User/UserContext";
+import toast, { Toaster } from "react-hot-toast";
 
-export default function Movies({ userToken }) {
+export default function Movies({ token }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
@@ -26,7 +27,7 @@ export default function Movies({ userToken }) {
 
   const { user, setUser } = useContext(UserContext);
 
-  const AuthRequest = AuthenticatedRequest(userToken);
+  const AuthRequest = AuthenticatedRequest(token);
 
   const getUserInfo = async () => {
     setLoading(true);
@@ -50,7 +51,7 @@ export default function Movies({ userToken }) {
 
   useEffect(async () => {
     console.log("Movies Component rendered");
-    console.log(user);
+    console.log(`movies token: ${token}`);
     await getUserInfo();
   }, []);
 
@@ -134,6 +135,23 @@ export default function Movies({ userToken }) {
 
   return (
     <>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          success: {
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+          },
+          error: {
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+          },
+        }}
+      />
       <div className="container" id="movies">
         <div className="row">
           <div className="col-lg-12 mt-4">

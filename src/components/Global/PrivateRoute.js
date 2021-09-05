@@ -1,23 +1,25 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Redirect, Route } from "react-router-dom";
 
 export default function PrivateRoute({ component: Component, ...rest }) {
-  var userToken = null;
+  var token = null;
   if (
     localStorage.getItem("token") !== undefined &&
-    localStorage.getItem("expiry") > Math.floor(Date.now() / 1000) &&
-    !userToken
+    localStorage.getItem("expiry") > Math.floor(Date.now() / 1000)
   ) {
-    userToken = localStorage.getItem("token");
-    console.log(`user Token: ${userToken}`);
+    token = localStorage.getItem("token");
+    console.log("setting...");
   }
-  console.log(`user Token: ${userToken}`);
 
   return (
     <Route
       {...rest}
       render={(props) => {
-        return userToken ? <Component userToken={userToken} {...props} /> : <Redirect to="/login" />;
+        return token ? (
+          <Component token={token} {...props} />
+        ) : (
+          <Redirect to="/login" />
+        );
       }}
     ></Route>
   );
