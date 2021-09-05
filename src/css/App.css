@@ -3,9 +3,9 @@
 }
 
 :root {
-  --primary: #7B26AD;
-  --teal: #269BAD;
-  --teal2: #34BDD2;
+  --primary: #7b26ad;
+  --teal: #269bad;
+  --teal2: #34bdd2;
 }
 
 ::selection {
@@ -33,12 +33,12 @@ body {
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:focus {
-  background-color: #269BAD;
-  border: 1px solid #269BAD;
+  background-color: #269bad;
+  border: 1px solid #269bad;
 }
 
 a {
-  color:var(--teal);
+  color: var(--teal);
 }
 
 a:hover {
@@ -151,6 +151,7 @@ a:hover {
 #movies .card-body {
   background-color: #3d4148;
   border-radius: 10px;
+  width: 100%;
 }
 
 #movies .btn-primary {
@@ -171,6 +172,22 @@ a:hover {
   margin-bottom: 20px;
 }
 
+.nav-tabs .nav-link {
+  border-radius: 0.25rem;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .nav.dynamic-tabs {
+    flex-direction: column;
+  }
+}
+
 #moviesAboutDiv {
   max-width: 90%;
 }
@@ -183,10 +200,17 @@ a:hover {
 .topBtn {
   color: #45505b;
   padding: 5px 10px;
+  margin-bottom: 10px;
   transition: 0.3s;
   font-size: 15px;
   border-radius: 20px;
   background: #f2f3f5;
+}
+
+@media (min-width: 768px) {
+  .logoutBtn {
+    float: right;
+  }
 }
 
 .swal2-confirm.btn-success {

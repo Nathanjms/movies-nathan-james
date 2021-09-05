@@ -14,7 +14,8 @@ import {
 } from "../Global/apiCommunication";
 import ReactLoading from "react-loading";
 import { UserContext } from "../User/UserContext";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { CustomToaster } from "../Global/Helpers";
 
 export default function Movies() {
   const [error, setError] = useState("");
@@ -121,30 +122,13 @@ export default function Movies() {
 
   return (
     <>
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          success: {
-            style: {
-              background: "#363636",
-              color: "#fff",
-            },
-          },
-          error: {
-            style: {
-              background: "#363636",
-              color: "#fff",
-            },
-          },
-        }}
-      />
+      {CustomToaster}
       <div className="container" id="movies">
         <div className="row">
           <div className="col-lg-12 mt-4">
             <Button
               variant="link"
-              className="topBtn"
-              style={{ float: "right" }}
+              className="topBtn logoutBtn"
               onClick={handleLogout}
             >
               Log Out
@@ -180,7 +164,7 @@ export default function Movies() {
             </Alert>
           )}
         </div>
-        <Tabs defaultActiveKey="movies-list" id="tabs">
+        <Tabs defaultActiveKey="movies-list" id="tabs" className="dynamic-tabs">
           <Tab eventKey="movies-list" title="My Watch List">
             {loading || loadingMovies ? (
               <div className="col-lg-12 d-flex row justify-content-center">
@@ -251,9 +235,7 @@ export default function Movies() {
                 </div>
               </div>
             ) : (
-              <RandomMoviePicker
-                request={AuthRequest}
-              />
+              <RandomMoviePicker request={AuthRequest} />
             )}
           </Tab>
           <Tab eventKey="about" title="About">
