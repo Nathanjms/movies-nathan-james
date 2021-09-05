@@ -17,6 +17,13 @@ import { UserContext } from "../User/UserContext";
 import toast from "react-hot-toast";
 import { CustomToaster } from "../Global/Helpers";
 
+const perPage = () => {
+  if (window.screen.availWidth >= 1020) return 9;
+  if (480 < window.screen.availWidth && window.screen.availWidth < 1020)
+    return 6;
+  return 4;
+};
+
 export default function Movies() {
   const [error, setError] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
@@ -25,10 +32,19 @@ export default function Movies() {
   const [loadingMovies, setLoadingMovies] = useState(false);
   const [show, setShow] = useState(false);
   const history = useHistory();
-
   const { user, setUser, token } = useContext(UserContext);
 
   const AuthRequest = AuthenticatedRequest(token);
+
+  useEffect(async () => {
+    await getUserInfo();
+  }, []);
+
+  useEffect(async () => {
+    if (user?.group_id > 0) {
+      await getAllMovies(user.group_id);
+    }
+  }, [user]);
 
   const getUserInfo = async () => {
     setLoading(true);
@@ -41,23 +57,6 @@ export default function Movies() {
       setLoading(false);
     }
   };
-
-  const perPage = () => {
-    if (window.screen.availWidth >= 1020) return 9;
-    if (480 < window.screen.availWidth && window.screen.availWidth < 1020)
-      return 6;
-    return 4;
-  };
-
-  useEffect(async () => {
-    await getUserInfo();
-  }, []);
-
-  useEffect(async () => {
-    if (user?.group_id > 0) {
-      await getAllMovies(user.group_id);
-    }
-  }, [user]);
 
   const getAllMovies = async (userGroupId) => {
     setLoadingMovies(true);
@@ -249,7 +248,6 @@ export default function Movies() {
           show={show}
           request={AuthRequest}
           moviesList={unseenMoviesList}
-          FormatResponseError={FormatResponseError}
           getAllMovies={getAllMovies}
         />
       </div>
