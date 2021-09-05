@@ -8,7 +8,6 @@ export default function PrivateRoute({ component: Component, ...rest }) {
     localStorage.getItem("expiry") > Math.floor(Date.now() / 1000)
   ) {
     token = localStorage.getItem("token");
-    console.log("setting...");
   }
 
   return (

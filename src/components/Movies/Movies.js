@@ -49,8 +49,6 @@ export default function Movies({ token }) {
   };
 
   useEffect(async () => {
-    console.log("Movies Component rendered");
-    console.log(`movies token: ${token}`);
     await getUserInfo();
   }, []);
 
@@ -61,7 +59,6 @@ export default function Movies({ token }) {
   }, [user]);
 
   const getAllMovies = async (userGroupId) => {
-    console.log(`getAllMovies, group ID: ${userGroupId}`);
     setLoadingMovies(true);
     try {
       const resultSeen = await AuthRequest.get(

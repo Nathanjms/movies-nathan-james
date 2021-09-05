@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import MyWatchList from "../MyWatchList";
 import RandomMoviePicker from "../RandomMoviePicker";
 import { Alert, Tabs, Tab, Button } from "react-bootstrap";
@@ -17,7 +17,6 @@ export default function MoviesDemo() {
 
   useEffect(() => {
     getAllMovies();
-    console.log(`demo`)
   }, []);
 
   const getAllMovies = () => {

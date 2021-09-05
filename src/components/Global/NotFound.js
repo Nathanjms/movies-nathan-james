@@ -5,5 +5,6 @@ export default function NotFound() {
   const history = useHistory();
   useEffect(() => {
     history.push("/login");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
