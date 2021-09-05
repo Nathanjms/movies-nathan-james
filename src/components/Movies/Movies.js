@@ -21,6 +21,7 @@ export default function Movies({ token }) {
   const [seenMoviesList, setMySeenMovies] = useState([]);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMovies, setLoadingMovies] = useState(false);
   const [show, setShow] = useState(false);
   const history = useHistory();
 
@@ -30,7 +31,6 @@ export default function Movies({ token }) {
 
   const getUserInfo = async () => {
     setLoading(true);
-    console.log("Get User Data");
     try {
       const result = await AuthRequest.post("/api/movies/user-info");
       setUser(result.data);
@@ -55,14 +55,14 @@ export default function Movies({ token }) {
   }, []);
 
   useEffect(async () => {
-    if (userInfo?.group_id > 0) {
-      await getAllMovies(userInfo.group_id);
+    if (user?.group_id > 0) {
+      await getAllMovies(user.group_id);
     }
   }, [user]);
 
   const getAllMovies = async (userGroupId) => {
     console.log(`getAllMovies, group ID: ${userGroupId}`);
-    setLoading(true);
+    setLoadingMovies(true);
     try {
       const resultSeen = await AuthRequest.get(
         `/api/movies/${userGroupId}/group?isSeen=1&perPage=${perPage()}`
@@ -75,7 +75,7 @@ export default function Movies({ token }) {
     } catch (err) {
       setError(FormatResponseError(err));
     }
-    setLoading(false);
+    setLoadingMovies(false);
   };
 
   const getNewMoviePage = async (url, isSeen) => {
@@ -105,7 +105,7 @@ export default function Movies({ token }) {
       toast.success(
         `Movie "${moviesArray[movieIndex]["title"]}" marked as seen!`
       );
-      await getAllMovies(userInfo.group_id);
+      await getAllMovies(user.group_id);
     } catch (err) {
       toast.error(FormatResponseError(err));
     }
@@ -185,7 +185,7 @@ export default function Movies({ token }) {
         </div>
         <Tabs defaultActiveKey="movies-list" id="tabs">
           <Tab eventKey="movies-list" title="My Watch List">
-            {loading ? (
+            {loading || loadingMovies ? (
               <div className="col-lg-12 d-flex row justify-content-center">
                 <div className="col-lg-12">
                   <h3>Loading Movies...</h3>
@@ -215,7 +215,7 @@ export default function Movies({ token }) {
             )}
           </Tab>
           <Tab eventKey="watched-movies-list" title="My Watched Movies">
-            {loading ? (
+            {loading || loadingMovies ? (
               <div className="col-lg-12 d-flex row justify-content-center">
                 <div className="col-lg-12">
                   <h3>Loading Movies...</h3>
