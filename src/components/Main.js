@@ -10,8 +10,10 @@ import NotFound from "./Global/NotFound";
 
 function Main() {
   const [user, setUser] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, token, setToken }}>
       <Router>
         <Switch>
           <PrivateRoute exact path="/" component={Movies} />

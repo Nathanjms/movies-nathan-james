@@ -16,7 +16,7 @@ import ReactLoading from "react-loading";
 import { UserContext } from "../User/UserContext";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function Movies({ token }) {
+export default function Movies() {
   const [error, setError] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
@@ -25,7 +25,7 @@ export default function Movies({ token }) {
   const [show, setShow] = useState(false);
   const history = useHistory();
 
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, token } = useContext(UserContext);
 
   const AuthRequest = AuthenticatedRequest(token);
 

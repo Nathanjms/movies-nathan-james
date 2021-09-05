@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Form, Button, Card, Container, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import ReactLoading from "react-loading";
 import { baseURL } from "../Global/apiCommunication";
+import { UserContext } from "./UserContext";
 
 export default function Login() {
   const emailRef = useRef();
@@ -11,6 +12,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const { setToken } = useContext(UserContext);
 
   async function login(email, password) {
     setLoading(true);
@@ -27,6 +29,7 @@ export default function Login() {
             "expiry",
             JSON.stringify(response.data.token.expiration)
           );
+          setToken(response.data.token.value);
           return history.push("/");
         } else {
           setError("Oops! Invalid Response from API");
