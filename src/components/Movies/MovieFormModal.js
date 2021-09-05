@@ -1,20 +1,21 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-import { cloneDeep } from "lodash";
 import { FormatResponseError } from "../Global/apiCommunication";
 import toast from "react-hot-toast";
+import { UserContext } from "../User/UserContext";
 
 export default function MovieFormModal({
   handleClose,
   show,
   request,
   moviesList,
-  groupId,
-  setMyUnseenMovies,
+  getAllMovies,
   demo = false,
 }) {
   const titleRef = useRef();
   const [loading, setLoading] = useState(false);
+  const { user } = useContext(UserContext);
+  const groupId = user.group_id;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -34,28 +35,13 @@ export default function MovieFormModal({
           return toast.error("Could not obtain new movie ID.");
         }
       }
-      const lastIndex = moviesList.length - 1;
 
-      var tempMovieList = cloneDeep(moviesList);
-      if (demo) {
-        tempMovieList.push({
-          id: demo ? lastIndex + 1 : result.data.id,
-          title: titleRef.current.value.trim(),
-          seen: false,
-          rating: null,
-        });
-      } else {
-        tempMovieList.data.push({
-          id: result.data.id,
-          title: titleRef.current.value.trim(),
-          seen: false,
-          rating: null,
-        });
-      }
-      setMyUnseenMovies(tempMovieList);
+      await getAllMovies(groupId)
       handleClose();
       setLoading(false);
-      toast.success(`Movie "${titleRef.current.value.trim()}" Added Successfully`);
+      toast.success(
+        `Movie "${titleRef.current.value.trim()}" Added Successfully`
+      );
     } catch (err) {
       setLoading(false);
       toast.error(FormatResponseError(err));

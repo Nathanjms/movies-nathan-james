@@ -1,15 +1,15 @@
 import axios from "axios";
 
-export function AuthenticatedRequest(currentUser) {
-  const baseURL =
-    process.env.NODE_ENV === "development"
-      ? `http://nathan-laravel-api.test`
-      : `https://nathanjms-laravel-api.herokuapp.com`;
+export const baseURL =
+  process.env.NODE_ENV === "development"
+    ? `http://nathan-laravel-api.test`
+    : `https://nathanjms-laravel-api.herokuapp.com`;
 
+export function AuthenticatedRequest(userToken) {
   return axios.create({
     baseURL: baseURL,
     headers: {
-      Authorization: `Bearer ${currentUser}`,
+      Authorization: `Bearer ${userToken}`,
       Accept: "application/json",
       "Content-Type": "application/json",
     },
@@ -25,4 +25,11 @@ export const FormatResponseError = (err) => {
     return err.response.data.message;
   }
   return "Error: The API could not be reached.";
+};
+
+export const login = async (email, password) => {
+  return await axios.post(`${baseURL}/api/login`, {
+    email: email,
+    password: password,
+  });
 };
