@@ -1,5 +1,5 @@
 import React from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 export default function StarRatings({
   movieId,
@@ -26,23 +26,6 @@ export default function StarRatings({
 
   return (
     <div>
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          success: {
-            style: {
-              background: "#363636",
-              color: "#fff",
-            },
-          },
-          error: {
-            style: {
-              background: "#363636",
-              color: "#fff",
-            },
-          },
-        }}
-      />
       <span>Rating: </span>
       <div className="star-rating">
         {starRatings.map((starRating, index) => {

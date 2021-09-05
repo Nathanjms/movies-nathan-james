@@ -13,10 +13,10 @@ import {
   FormatResponseError,
 } from "../Global/apiCommunication";
 import ReactLoading from "react-loading";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Movies({ currentUser }) {
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -89,8 +89,6 @@ export default function Movies({ currentUser }) {
 
   const markAsSeen = async (movieId) => {
     try {
-      setError("");
-      setSuccess("");
       await AuthRequest.put("/api/movies/mark-as-seen", {
         movieId: movieId,
       });
@@ -98,10 +96,12 @@ export default function Movies({ currentUser }) {
       let movieIndex = findIndex(moviesArray, {
         id: movieId,
       });
-      setSuccess(`Movie "${moviesArray[movieIndex]["title"]}" marked as seen!`);
+      toast.success(
+        `Movie "${moviesArray[movieIndex]["title"]}" marked as seen!`
+      );
       setNewMovieLists(moviesArray, movieIndex);
     } catch (err) {
-      setError(FormatResponseError(err));
+      toast.error(FormatResponseError(err));
     }
   };
 
@@ -128,6 +128,23 @@ export default function Movies({ currentUser }) {
 
   return (
     <>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          success: {
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+          },
+          error: {
+            style: {
+              background: "#363636",
+              color: "#fff",
+            },
+          },
+        }}
+      />
       <div className="container" id="movies">
         <div className="row">
           <div className="col-lg-12 mt-4">
@@ -159,11 +176,6 @@ export default function Movies({ currentUser }) {
               {error}
             </Alert>
           )}
-          {success && (
-            <Alert className="w-100" variant="success">
-              {success}
-            </Alert>
-          )}
         </div>
         <Tabs defaultActiveKey="movies-list" id="tabs">
           <Tab eventKey="movies-list" title="My Watch List">
@@ -178,13 +190,15 @@ export default function Movies({ currentUser }) {
               </div>
             ) : (
               <>
-                <Button
-                  variant="primary"
-                  className="mt-3"
-                  onClick={() => setShow(true)}
-                >
-                  Add a new Film!
-                </Button>
+                {!error && (
+                  <Button
+                    variant="primary"
+                    className="mt-3"
+                    onClick={() => setShow(true)}
+                  >
+                    Add a new Film!
+                  </Button>
+                )}
                 <MyWatchList
                   markAsSeen={markAsSeen}
                   movies={unseenMoviesList}
@@ -249,8 +263,6 @@ export default function Movies({ currentUser }) {
         <MovieFormModal
           handleClose={() => setShow(false)}
           show={show}
-          setError={setError}
-          setSuccess={setSuccess}
           request={AuthRequest}
           moviesList={unseenMoviesList}
           groupId={userInfo.group_id}
