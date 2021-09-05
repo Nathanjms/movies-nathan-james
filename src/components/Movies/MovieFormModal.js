@@ -1,20 +1,22 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { cloneDeep } from "lodash";
 import { FormatResponseError } from "../Global/apiCommunication";
 import toast from "react-hot-toast";
+import { UserContext } from "../User/UserContext";
 
 export default function MovieFormModal({
   handleClose,
   show,
   request,
   moviesList,
-  groupId,
   setMyUnseenMovies,
   demo = false,
 }) {
   const titleRef = useRef();
   const [loading, setLoading] = useState(false);
+  const { user } = useContext(UserContext);
+  const groupId = user.group_id;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -55,7 +57,9 @@ export default function MovieFormModal({
       setMyUnseenMovies(tempMovieList);
       handleClose();
       setLoading(false);
-      toast.success(`Movie "${titleRef.current.value.trim()}" Added Successfully`);
+      toast.success(
+        `Movie "${titleRef.current.value.trim()}" Added Successfully`
+      );
     } catch (err) {
       setLoading(false);
       toast.error(FormatResponseError(err));

@@ -253,7 +253,6 @@ export default function Movies({ token }) {
             ) : (
               <RandomMoviePicker
                 request={AuthRequest}
-                groupId={user.group_id}
               />
             )}
           </Tab>
@@ -268,7 +267,6 @@ export default function Movies({ token }) {
           show={show}
           request={AuthRequest}
           moviesList={unseenMoviesList}
-          groupId={user.group_id}
           FormatResponseError={FormatResponseError}
           setMyUnseenMovies={setMyUnseenMovies}
         />

@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
 import { FormatResponseError } from "../Global/apiCommunication";
+import { UserContext } from "../User/UserContext";
 export default function RandomMoviePicker({
   request,
-  groupId,
   demo = false,
   demoMovies = [],
 }) {
@@ -14,6 +14,8 @@ export default function RandomMoviePicker({
   const [noMovies, setNoMovies] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const { user } = useContext(UserContext);
+  const groupId = user.group_id;
 
   const getAllMovies = async () => {
     if (demo) {
