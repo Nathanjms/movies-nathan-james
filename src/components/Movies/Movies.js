@@ -18,7 +18,6 @@ import toast, { Toaster } from "react-hot-toast";
 
 export default function Movies({ token }) {
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -96,8 +95,6 @@ export default function Movies({ token }) {
 
   const markAsSeen = async (movieId) => {
     try {
-      setError("");
-      setSuccess("");
       await AuthRequest.put("/api/movies/mark-as-seen", {
         movieId: movieId,
       });
@@ -105,10 +102,12 @@ export default function Movies({ token }) {
       let movieIndex = findIndex(moviesArray, {
         id: movieId,
       });
-      setSuccess(`Movie "${moviesArray[movieIndex]["title"]}" marked as seen!`);
+      toast.success(
+        `Movie "${moviesArray[movieIndex]["title"]}" marked as seen!`
+      );
       setNewMovieLists(moviesArray, movieIndex);
     } catch (err) {
-      setError(FormatResponseError(err));
+      toast.error(FormatResponseError(err));
     }
   };
 
@@ -172,10 +171,20 @@ export default function Movies({ token }) {
           </div>
           <div className="col-lg-12 pb-4">
             <h5 className="text-center pt-5">
-              Name: {loading ? "Loading..." : `${user.user_name}`}
+              Name:{" "}
+              {loading
+                ? "Loading..."
+                : user?.user_name
+                ? `${user.user_name}`
+                : `Unknown`}
             </h5>
             <h5 className="text-center">
-              Group: {loading ? "Loading..." : `${user.group_name}`}
+              Group:{" "}
+              {loading
+                ? "Loading..."
+                : user?.group_name
+                ? `${user.group_name}`
+                : `Unknown`}
             </h5>
           </div>
           {error && (
@@ -183,14 +192,39 @@ export default function Movies({ token }) {
               {error}
             </Alert>
           )}
-          {success && (
-            <Alert className="w-100" variant="success">
-              {success}
-            </Alert>
-          )}
         </div>
         <Tabs defaultActiveKey="movies-list" id="tabs">
           <Tab eventKey="movies-list" title="My Watch List">
+            {loading ? (
+              <div className="col-lg-12 d-flex row justify-content-center">
+                <div className="col-lg-12">
+                  <h3>Loading Movies...</h3>
+                </div>
+                <div>
+                  <ReactLoading height={30} width={30} type={"spin"} />
+                </div>
+              </div>
+            ) : (
+              <>
+                {!error && (
+                  <Button
+                    variant="primary"
+                    className="mt-3"
+                    onClick={() => setShow(true)}
+                  >
+                    Add a new Film!
+                  </Button>
+                )}
+                <MyWatchList
+                  markAsSeen={markAsSeen}
+                  movies={unseenMoviesList}
+                  seen={false}
+                  getNewMoviePage={getNewMoviePage}
+                />
+              </>
+            )}
+          </Tab>
+          <Tab eventKey="watched-movies-list" title="My Watched Movies">
             {loading ? (
               <div className="col-lg-12 d-flex row justify-content-center">
                 <div className="col-lg-12">
@@ -211,21 +245,13 @@ export default function Movies({ token }) {
                 </Button>
                 <MyWatchList
                   markAsSeen={markAsSeen}
-                  movies={unseenMoviesList}
-                  seen={false}
+                  movies={seenMoviesList}
+                  seen={true}
                   getNewMoviePage={getNewMoviePage}
+                  request={AuthRequest}
                 />
               </>
             )}
-          </Tab>
-          <Tab eventKey="watched-movies-list" title="My Watched Movies">
-            <MyWatchList
-              markAsSeen={markAsSeen}
-              movies={seenMoviesList}
-              seen={true}
-              getNewMoviePage={getNewMoviePage}
-              request={AuthRequest}
-            />
           </Tab>
           <Tab eventKey="random-movie-picker" title="Random Movie Picker">
             {!user?.group_id ? (
@@ -253,8 +279,6 @@ export default function Movies({ token }) {
         <MovieFormModal
           handleClose={() => setShow(false)}
           show={show}
-          setError={setError}
-          setSuccess={setSuccess}
           request={AuthRequest}
           moviesList={unseenMoviesList}
           groupId={user.group_id}

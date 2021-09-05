@@ -1,5 +1,5 @@
 import React from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 export default function StarRatings({
   movieId,

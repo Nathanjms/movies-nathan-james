@@ -2,12 +2,11 @@ import React, { useRef, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { cloneDeep } from "lodash";
 import { FormatResponseError } from "../Global/apiCommunication";
+import toast from "react-hot-toast";
 
 export default function MovieFormModal({
   handleClose,
   show,
-  setError,
-  setSuccess,
   request,
   moviesList,
   groupId,
@@ -21,29 +20,23 @@ export default function MovieFormModal({
     e.preventDefault();
 
     if (titleRef.current.value.trim() === "") {
-      setError("Invalid Title");
-      return;
+      return toast.error("Invalid Title");
     }
 
     try {
-      setError("");
       setLoading(true);
-      console.log(demo);
       if (!demo) {
         var result = await request.post(`/api/movies/${groupId}/add`, {
           title: titleRef.current.value,
         });
 
         if (!result?.data?.id) {
-          return setError("Could not obtain new movie ID.");
+          return toast.error("Could not obtain new movie ID.");
         }
-        console.log('test');
       }
       const lastIndex = moviesList.length - 1;
-      console.log(moviesList);
 
       var tempMovieList = cloneDeep(moviesList);
-      console.log(tempMovieList);
       if (demo) {
         tempMovieList.push({
           id: demo ? lastIndex + 1 : result.data.id,
@@ -62,12 +55,10 @@ export default function MovieFormModal({
       setMyUnseenMovies(tempMovieList);
       handleClose();
       setLoading(false);
-      setSuccess("");
-      setSuccess(`Movie "${titleRef.current.value.trim()}" Added Successfully`);
+      toast.success(`Movie "${titleRef.current.value.trim()}" Added Successfully`);
     } catch (err) {
-      handleClose();
       setLoading(false);
-      setError(FormatResponseError(err));
+      toast.error(FormatResponseError(err));
     }
   }
 
