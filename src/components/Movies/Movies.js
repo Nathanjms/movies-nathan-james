@@ -268,7 +268,7 @@ export default function Movies({ token }) {
           request={AuthRequest}
           moviesList={unseenMoviesList}
           FormatResponseError={FormatResponseError}
-          setMyUnseenMovies={setMyUnseenMovies}
+          getAllMovies={getAllMovies}
         />
       </div>
       <footer id="footer">
