@@ -1,6 +1,5 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
-import toast, { Toaster } from "react-hot-toast";
 import StarRatings from "./StarRatings";
 
 export default function MyWatchList({
@@ -24,10 +23,6 @@ export default function MyWatchList({
     getNewMoviePage(newPageUrl, seen);
   };
 
-  const handleChange = () => {
-    return toast.success("Rating Added Successfully!");
-  };
-
   return (
     <div className="row">
       <div className="col-lg-12 pt-3">
@@ -48,7 +43,7 @@ export default function MyWatchList({
                   {!seen && (
                     <Button
                       disabled={movie.seen}
-                      onClick={() => handleChange(movie.id)}
+                      onClick={() => markAsSeen(movie.id)}
                     >
                       Seen It!
                     </Button>

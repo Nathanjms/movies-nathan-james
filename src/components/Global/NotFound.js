@@ -1,7 +1,9 @@
-import React from 'react'
+import { useEffect } from "react";
+import { useHistory } from "react-router";
 
 export default function NotFound() {
-    return (
-        <h1>Not Found :c</h1>
-    )
-} 
+  const history = useHistory();
+  useEffect(() => {
+    history.push("/login");
+  }, []);
+}

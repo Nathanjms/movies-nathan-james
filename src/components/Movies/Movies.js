@@ -4,7 +4,7 @@ import MyWatchList from "./MyWatchList";
 import RandomMoviePicker from "./RandomMoviePicker";
 import { useHistory } from "react-router-dom";
 import { Alert, Tabs, Tab, Button } from "react-bootstrap";
-import { findIndex, cloneDeep } from "lodash";
+import { findIndex } from "lodash";
 import MovieFormModal from "./MovieFormModal";
 import AboutMovies from "./AboutMovies";
 import Footer from "../Global/Footer";
@@ -42,7 +42,7 @@ export default function Movies({ token }) {
   };
 
   const perPage = () => {
-    if (window.screen.availWidth >= 1020) return 8;
+    if (window.screen.availWidth >= 1020) return 9;
     if (480 < window.screen.availWidth && window.screen.availWidth < 1020)
       return 6;
     return 4;
@@ -54,9 +54,9 @@ export default function Movies({ token }) {
     await getUserInfo();
   }, []);
 
-  useEffect(() => {
-    if (user?.group_id > 0) {
-      getAllMovies(user.group_id);
+  useEffect(async () => {
+    if (userInfo?.group_id > 0) {
+      await getAllMovies(userInfo.group_id);
     }
   }, [user]);
 
@@ -105,20 +105,10 @@ export default function Movies({ token }) {
       toast.success(
         `Movie "${moviesArray[movieIndex]["title"]}" marked as seen!`
       );
-      setNewMovieLists(moviesArray, movieIndex);
+      await getAllMovies(userInfo.group_id);
     } catch (err) {
       toast.error(FormatResponseError(err));
     }
-  };
-
-  const setNewMovieLists = (moviesArray, movieIndex) => {
-    let tempMovieList;
-    tempMovieList = cloneDeep(unseenMoviesList);
-    tempMovieList.data.splice(movieIndex, 1);
-    setMyUnseenMovies(tempMovieList);
-    tempMovieList = cloneDeep(seenMoviesList);
-    tempMovieList.data.push(moviesArray[movieIndex]);
-    setMySeenMovies(tempMovieList);
   };
 
   async function handleLogout() {
