@@ -110,7 +110,7 @@ export default function MoviesDemo() {
             </Alert>
           )}
         </div>
-        <Tabs defaultActiveKey="movies-list" id="tabs">
+        <Tabs defaultActiveKey="movies-list" id="tabs" className="dynamic-tabs">
           <Tab eventKey="movies-list" title="My Watch List">
             <Button
               variant="primary"
