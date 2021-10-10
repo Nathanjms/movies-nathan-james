@@ -7,10 +7,11 @@ import MovieFormModal from "../MovieFormModal";
 import AboutMovies from "../AboutMovies";
 import Footer from "../../Global/Footer";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
+import { CustomToaster } from "../../Global/Helpers";
 
 export default function MoviesDemo() {
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [seenMoviesList, setMySeenMovies] = useState([]);
   const [unseenMoviesList, setMyUnseenMovies] = useState([]);
   const [show, setShow] = useState(false);
@@ -35,7 +36,6 @@ export default function MoviesDemo() {
   };
 
   const getNewMoviePage = () => {
-    // Swal.fire("This feature is only available in the full version!");
     Swal.mixin({
       customClass: {
         confirmButton: "btn btn-success",
@@ -43,8 +43,7 @@ export default function MoviesDemo() {
       buttonsStyling: false,
     }).fire({
       icon: "info",
-      text: "This feature is only available in the full version!",
-      // timer: 1500,
+      text: "This feature, which limits the number of movies per page, is only available in the full version!",
       timerProgressBar: true,
     });
   };
@@ -54,7 +53,9 @@ export default function MoviesDemo() {
       id: movieId,
     });
     setNewMovieLists(unseenMoviesList, movieIndex)
-    setSuccess(`Movie "${unseenMoviesList[movieIndex]["title"]}" marked as seen!`);
+    toast.success(
+      `Movie "${unseenMoviesList[movieIndex]["title"]}" marked as seen!`
+    );
   };
 
   const setNewMovieLists = (moviesArray, movieIndex) => {
@@ -69,9 +70,18 @@ export default function MoviesDemo() {
 
   return (
     <>
+      {CustomToaster}
       <div className="container" id="movies">
         <div className="row">
           <div className="col-lg-12 mt-4">
+            <Button
+              variant="link"
+              className="topBtn"
+              style={{ float: "left" }}
+              href="login"
+            >
+              Log In
+            </Button>
             <Button
               variant="link"
               className="topBtn"
@@ -97,11 +107,6 @@ export default function MoviesDemo() {
           {error && (
             <Alert className="w-100" variant="danger">
               {error}
-            </Alert>
-          )}
-          {success && (
-            <Alert className="w-100" variant="success">
-              {success}
             </Alert>
           )}
         </div>
@@ -145,7 +150,6 @@ export default function MoviesDemo() {
           handleClose={() => setShow(false)}
           show={show}
           setError={setError}
-          setSuccess={setSuccess}
           moviesList={unseenMoviesList}
           setMyUnseenMovies={setMyUnseenMovies}
           demo={true}

@@ -164,7 +164,7 @@ a:hover {
   margin-bottom: 10px;
   transition: 0.3s;
   font-size: 15px;
-  border-radius: 20px;
+  border-radius: 0.25rem;
   background: #f2f3f5;
 }
 
