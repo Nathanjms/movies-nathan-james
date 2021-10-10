@@ -15,14 +15,7 @@ import {
 import ReactLoading from "react-loading";
 import { UserContext } from "../User/UserContext";
 import toast from "react-hot-toast";
-import { CustomToaster } from "../Global/Helpers";
-
-const perPage = () => {
-  if (window.screen.availWidth >= 1020) return 9;
-  if (480 < window.screen.availWidth && window.screen.availWidth < 1020)
-    return 6;
-  return 4;
-};
+import { CustomToaster, perPage } from "../Global/Helpers";
 
 export default function Movies() {
   const [error, setError] = useState("");
@@ -248,6 +241,7 @@ export default function Movies() {
           show={show}
           request={AuthRequest}
           moviesList={unseenMoviesList}
+          setMyUnseenMovies={setMyUnseenMovies}
           getAllMovies={getAllMovies}
         />
       </div>
