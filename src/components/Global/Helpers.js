@@ -22,7 +22,8 @@ export const CustomToaster = (
 );
 
 export const perPage = () => {
-  if (window.screen.availWidth >= 1020) return 9;
+  console.log(window.screen.availWidth)
+  if (window.screen.availWidth >= 1020) return 12;
   if (480 < window.screen.availWidth && window.screen.availWidth < 1020)
     return 6;
   return 4;

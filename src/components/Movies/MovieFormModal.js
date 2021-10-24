@@ -19,7 +19,7 @@ export default function MovieFormModal({
   const [loading, setLoading] = useState(false);
   const { user } = useContext(UserContext);
   const groupId = user.group_id;
-  const nextId = useRef(19);
+  const nextId = useRef(15);
 
   async function handleSubmit(e) {
     e.preventDefault();

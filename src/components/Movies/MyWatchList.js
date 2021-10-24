@@ -37,7 +37,7 @@ export default function MyWatchList({
           )}
           {moviesArray.map((movie, index) => {
             return (
-              <div key={movie.id} className="col-sm-6 col-lg-4 mb-5">
+              <div key={movie.id} className="col-sm-6 col-lg-3 mb-5">
                 <Card.Body className="h-100">
                   <p>{movie.title}</p>
                   {!seen && (

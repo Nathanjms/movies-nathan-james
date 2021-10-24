@@ -10,7 +10,7 @@ function Footer() {
           <div className="contact">
             <ul className="footerList list-unstyled">
               <li>Nathan James</li>
-              <li>nathan@nathanjms.co.uk</li>
+              <li style={{ paddingBottom: "5px" }}>nathan@nathanjms.co.uk</li>
               <li>
                 <a className="footerLogos" href="https://github.com/Nathanjms/">
                   <FaGithub />
@@ -29,8 +29,8 @@ function Footer() {
           <h4 style={{ paddingBottom: "20px" }}>Extras</h4>
           <div className="contact">
             <ul className="footerList list-unstyled">
-              <li><a href="https://www.nathanjms.co.uk">Main Site</a></li>
-              <li>Last updated: 22nd August 2021</li>
+              <li><a href="https://www.nathanjms.co.uk">Go To Main Site</a></li>
+              <li>Last updated: 24th October 2021</li>
             </ul>
           </div>
         </div>
