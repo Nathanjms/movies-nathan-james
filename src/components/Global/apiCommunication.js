@@ -3,7 +3,7 @@ import axios from "axios";
 export const baseURL =
   process.env.NODE_ENV === "development"
     ? `http://nathan-laravel-api.test`
-    : `https://nathanjms-laravel-api.herokuapp.com`;
+    : `https://nathanjms-api.herokuapp.com`;
 
 export function AuthenticatedRequest(userToken) {
   return axios.create({
