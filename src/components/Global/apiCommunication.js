@@ -1,9 +1,6 @@
 import axios from "axios";
 
-export const baseURL =
-  process.env.NODE_ENV === "development"
-    ? `http://nathan-laravel-api.test`
-    : `https://nathanjms-api.herokuapp.com`;
+export const baseURL = process.env.REACT_APP_API_URL;
 
 export function AuthenticatedRequest(userToken) {
   return axios.create({
