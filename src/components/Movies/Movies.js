@@ -69,7 +69,7 @@ export default function Movies() {
   };
 
   const getNewMoviePage = async (url, isSeen) => {
-    if (process.env.NODE_ENV === "production") {
+    if (process?.env?.NODE_ENV === "production") {
       url = url.replace("http:", "https:");
     }
     try {

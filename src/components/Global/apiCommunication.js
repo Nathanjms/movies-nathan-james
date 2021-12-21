@@ -1,6 +1,8 @@
 import axios from "axios";
 
-export const baseURL = process.env.REACT_APP_API_URL;
+export const baseURL = process?.env?.REACT_APP_API_URL
+  ? process.env.REACT_APP_API_URL
+  : "http://api.nathanjms.local";
 
 export function AuthenticatedRequest(userToken) {
   return axios.create({
