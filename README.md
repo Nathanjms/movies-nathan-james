@@ -1,7 +1,9 @@
+# Movies | Nathanjms
+
 ## Setup:
 
 1. Run `npm install`.
-2. Ensure `nathan-laravel-api` is set up and running with valet.
+2. Ensure `nathanjms-api` is set up and running.
 3. Run `npm start`.
 
 ### Deployment Status:
